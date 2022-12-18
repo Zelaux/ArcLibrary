@@ -15,6 +15,7 @@ typealias Align = Int
 typealias Aligns = arc.util.Align
 
 object SideTooltips {
+    @JvmStatic
     val instance = this;
     var defaultTooltipTable: Cons2<String, Table> = Cons2 { text, table ->
         table.background(black6).margin(4f).add(text)
