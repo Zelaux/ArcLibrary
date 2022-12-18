@@ -9,7 +9,7 @@ subprojects{
     sourceSets.test.resources.srcDirs = ["test/resources"]
 
     dependencies{
-        implementation libraries.arcCore
+        compileOnly libraries.arcCore
 //    testImplementation aproj(":natives:natives-desktop")
     }
 
