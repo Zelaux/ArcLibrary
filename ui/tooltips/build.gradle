@@ -1,0 +1,4 @@
+dependencies{
+    compileOnly aproj(":ui:utils")
+    compileOnly aproj(":ui:defaults")
+}

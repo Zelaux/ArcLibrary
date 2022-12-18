@@ -1,0 +1,78 @@
+
+ext{
+    versions = [:]
+    libraries = [:]
+}
+versions.arc = "v140.4"
+
+libraries.jnigen = [
+        "com.github.libgdx.gdx-jnigen:gdx-jnigen:$versions.jnigen"
+]
+libraries.getArc = { String moduleName ->
+    return  "com.github.Anuken.Arc:$moduleName:${versions.arc}"
+}
+libraries.arcCore=libraries.getArc("arc-core")
+
+allprojects{
+    apply plugin: 'maven-publish'
+    group = 'com.github.Anuken'
+    version = '1.0'
+
+    buildscript{
+        repositories{
+            mavenCentral()
+            maven{ url "https://oss.sonatype.org/content/repositories/snapshots/" }
+            google()
+            maven{ url 'https://jitpack.io' }
+        }
+    }
+
+    repositories{
+        mavenCentral()
+        maven{ url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven{ url "https://teavm.org/maven/repository" }
+        google()
+        maven{ url 'https://jitpack.io' }
+    }
+
+    ext.aproj = { String module ->
+        if(findProject(module) != null){
+            return project(module)
+        }else{
+            return project(":ZelauxArcLib" + module)
+        }
+    }
+
+    tasks.withType(JavaCompile){
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+        options.encoding = "UTF-8"
+    }
+}
+
+subprojects{
+    apply plugin: "java-library"
+
+    compileJava{
+        options.fork = true
+        options.incremental = true
+    }
+
+    java{
+        withJavadocJar()
+        withSourcesJar()
+    }
+
+    publishing{
+        publications{
+            maven(MavenPublication){
+                from components.java
+            }
+        }
+    }
+}
+
+
+repositories{
+    mavenCentral()
+}
