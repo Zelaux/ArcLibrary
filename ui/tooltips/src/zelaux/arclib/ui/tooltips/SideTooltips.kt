@@ -15,14 +15,17 @@ typealias Align = Int
 typealias Aligns = arc.util.Align
 
 object SideTooltips {
+    val instance = this;
     var defaultTooltipTable: Cons2<String, Table> = Cons2 { text, table ->
         table.background(black6).margin(4f).add(text)
     };
 
+    @JvmStatic
     fun <T : Element> mutableTooltip(table: Table, element: T, tooltipText: ObjectRef<String?>): Cell<T> {
         return table.add(element).tooltip { t: Table -> t.background(black6).margin(4f).label { tooltipText.element }.visible { tooltipText.element != null } }
     }
 
+    @JvmStatic
     fun <T : Element> mutableSideTooltip(table: Table, align: Int, element: T, tooltipText: ObjectRef<String?>): Cell<T> {
         return table.add(element).self { cell: Cell<T> ->
             cell.tooltipSide(align) {
