@@ -248,6 +248,9 @@ public class ComboBox extends Table{
             public Color backgroundColor=new Color();
             public ButtonStyle buttonStyle;
 
+            public ComboBoxItemStyle(){
+
+            }
             public ComboBoxItemStyle(ComboBoxItemStyle style){
                 this.font = style.font;
                 this.image = style.image;
