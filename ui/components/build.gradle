@@ -1,0 +1,6 @@
+dependencies{
+    compileOnly aproj(":ui:utils")
+    compileOnly aproj(":ui:defaults")
+    compileOnly aproj(":ui:tooltips")
+    compileOnly aproj(":ui:listeners")
+}
