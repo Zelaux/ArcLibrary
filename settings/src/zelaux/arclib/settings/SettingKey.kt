@@ -10,6 +10,7 @@ open class SettingKey<T>(
     val valueSetter: (T, SettingKey<T>) -> Unit,
 ) {
     companion object {
+        @JvmField
         val allKeys = Seq<SettingKey<*>>()
     }
 
