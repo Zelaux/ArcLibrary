@@ -3,5 +3,7 @@ include ":ui:utils"
 include ":ui:tooltips"
 include ":ui:components"
 include ":ui:listeners"
+
+include "settings"
 rootProject.name = 'ZelauxArcLib'
 
