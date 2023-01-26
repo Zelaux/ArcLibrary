@@ -1,8 +1,18 @@
 package zelaux.arclib.settings
 
 import arc.*
+import arc.graphics.Color
 import arc.util.serialization.*
 
+open class ColorSettingKey(key: String,tmpColor: Color?=null, defaultProvider: () -> Color) : SettingKey<Color>(key, defaultProvider, {
+    if (tmpColor==null){
+        Color(Core.settings.getInt(it.key, it.def().rgba()))
+    }else{
+        tmpColor.set(Core.settings.getInt(it.key, it.def().rgba()))
+    }
+}, { value, key ->
+    Core.settings.put(key.key, value.rgba())
+})
 open class StringSettingKey(key: String, defaultProvider: () -> String) : SettingKey<String>(key, defaultProvider, {
     Core.settings[it.key, it.def()].toString()
 }, { value, key ->
