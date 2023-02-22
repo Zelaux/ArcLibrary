@@ -10,7 +10,7 @@ open class EnumIdSettingKey<T : Enum<T>>(key: String, values: Array<T>, defaultP
     Core.settings.put(key.key, value.ordinal)
 }){
     override fun setDefault() {
-        Core.settings.put(key,def().ordinal)
+        Core.settings.defaults(key,def().ordinal)
     }
 }
 
@@ -29,7 +29,7 @@ open class EnumNameSettingKey<T : Enum<T>>(key: String, values: Array<T>, defaul
     }
 
     override fun setDefault() {
-        Core.settings.put(key,def().name)
+        Core.settings.defaults(key,def().name)
     }
 }
 open class NamedElementSettingKey<T : NamedElementSettingKey.NamedElement>(key: String, values: Array<T>, defaultProvider: () -> T) : SettingKey<T>(key, defaultProvider,
@@ -46,7 +46,7 @@ open class NamedElementSettingKey<T : NamedElementSettingKey.NamedElement>(key: 
         }
     }
     override fun setDefault() {
-        Core.settings.put(key,def().settingsKey())
+        Core.settings.defaults(key,def().settingsKey())
     }
     interface NamedElement{
         fun settingsKey():String
