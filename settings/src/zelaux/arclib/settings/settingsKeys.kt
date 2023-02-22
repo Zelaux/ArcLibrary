@@ -1,18 +1,23 @@
 package zelaux.arclib.settings
 
-import arc.*
+import arc.Core
 import arc.graphics.Color
-import arc.util.serialization.*
+import arc.util.serialization.Jval
 
-open class ColorSettingKey(key: String,tmpColor: Color?=null, defaultProvider: () -> Color) : SettingKey<Color>(key, defaultProvider, {
-    if (tmpColor==null){
+open class ColorSettingKey(key: String, tmpColor: Color? = null, defaultProvider: () -> Color) : SettingKey<Color>(key, defaultProvider, {
+    if (tmpColor == null) {
         Color(Core.settings.getInt(it.key, it.def().rgba()))
-    }else{
+    } else {
         tmpColor.set(Core.settings.getInt(it.key, it.def().rgba()))
     }
 }, { value, key ->
     Core.settings.put(key.key, value.rgba())
-})
+}) {
+    override fun setDefault() {
+        Core.settings.defaults(key, def().rgba())
+    }
+}
+
 open class StringSettingKey(key: String, defaultProvider: () -> String) : SettingKey<String>(key, defaultProvider, {
     Core.settings[it.key, it.def()].toString()
 }, { value, key ->
@@ -37,5 +42,9 @@ open class JvalSettingKey(key: String, defaultProvider: () -> Jval) : SettingKey
     value
 }, { value, key ->
     Core.settings.put(key.key, value.toString(Jval.Jformat.formatted))
-})
+}) {
+    override fun setDefault() {
+        Core.settings.defaults(key, def().toString(Jval.Jformat.formatted))
+    }
+}
 
