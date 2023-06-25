@@ -1,0 +1,27 @@
+apply {
+    plugin "java"
+}
+
+dependencies{
+    implementation project(":graphics:g3d")
+    implementation libraries.getArc("arc-core")
+    implementation libraries.getArc("g3d")
+    implementation libraries.getArc("backend-sdl")
+    implementation libraries.getArc("natives-desktop")
+    implementation "com.github.Anuken.MindustryJitpack:core:v145"
+}
+
+jar {
+    from {
+        configurations.runtimeClasspath.collect { File file ->
+            file.isDirectory() ? file : zipTree(file)
+        }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes(
+                'Main-Class': 'tests.Tests'
+        )
+    }
+}

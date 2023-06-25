@@ -1,9 +1,4 @@
-
-plugins{
-    id 'org.jetbrains.kotlin.jvm' version '1.7.10'
-}
 subprojects{
-    apply plugin: "kotlin"
     sourceSets.main.java.srcDirs = ["src"]
     sourceSets.test.java.srcDirs = ["test"]
     sourceSets.test.resources.srcDirs = ["test/resources"]
@@ -17,22 +12,6 @@ subprojects{
             exceptionFormat = 'full'
             showStandardStreams = true
         }
-    }
-/*
-
-    dependencies{
-        testImplementation 'org.jetbrains.kotlin:kotlin-test'
-    }*/
-
-    test{
         useJUnitPlatform()
-    }
-
-    compileKotlin{
-        kotlinOptions.jvmTarget = '1.8'
-    }
-
-    compileTestKotlin{
-        kotlinOptions.jvmTarget = '1.8'
     }
 }
