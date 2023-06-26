@@ -32,11 +32,7 @@ public class Tests extends ApplicationCore {
 
         Vars.renderer3D = new GenericRenderer3D();
         Vars.renderer3D.init();
-        Vars.renderer3D.models.addAll(ObjectModelFactory.create(new Fi("models/cube/models.obj", Files.FileType.internal),
-                new ObjectShader(new Fi("shaders/objecttype/shader.vert", Files.FileType.internal),
-                        new Fi("shaders/objecttype/shader.frag", Files.FileType.internal))));
-
-        Vars.renderer3D.models.addAll(ObjectModelFactory.create(new Fi("models/polar/polar.obj", Files.FileType.internal),
+        Vars.renderer3D.models.addAll(ObjectModelFactory.create(new Fi("models/suz/suz.obj", Files.FileType.internal),
                 new ObjectShader(new Fi("shaders/objecttype/shader.vert", Files.FileType.internal),
                         new Fi("shaders/objecttype/shader.frag", Files.FileType.internal))));
 
