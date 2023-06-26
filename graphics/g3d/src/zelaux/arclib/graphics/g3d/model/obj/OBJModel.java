@@ -19,6 +19,11 @@ public class OBJModel implements Model {
     private final OBJ obj;
     private final MTL mtl;
 
+    /** Transformation matrix. **/
+    public Mat3D transformation = new Mat3D();
+    /** Translation vector. **/
+    public Vec3 translation = new Vec3();
+
     public OBJModel(OBJ obj, MTL mtl, Texture texture, ObjectShader shader) {
         this.mtl = mtl;
         this.obj = obj;
@@ -27,15 +32,8 @@ public class OBJModel implements Model {
         rebuildMesh();
     }
 
-    Mat3D transformation = new Mat3D();
-    Vec3 translation = new Vec3();
-    float rot = 0;
-
     @Override
     public void render(Renderer3D renderer) {
-        rot += 0.1f;
-        transformation.setToRotation(Vec3.Y, rot);
-
         texture.bind();
         shader.bind();
 
