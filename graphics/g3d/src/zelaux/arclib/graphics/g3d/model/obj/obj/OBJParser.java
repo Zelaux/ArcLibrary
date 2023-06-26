@@ -52,6 +52,7 @@ public class OBJParser {
                     vertices.clear();
                 }
                 currentObj = new OBJ(file);
+                currentObj.name = args.first();
                 currentObj.mtlFile = mtlLib;
             } else if (key.equals("v")) {
                 float[] vert = toFloats(args.toArray()).toArray();

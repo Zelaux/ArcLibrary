@@ -28,9 +28,15 @@ public class Tests extends ApplicationCore {
     public void setup() {
         Time.mark();
 
+
+
         Vars.renderer3D = new GenericRenderer3D();
         Vars.renderer3D.init();
         Vars.renderer3D.models.addAll(ObjectModelFactory.create(new Fi("models/cube/models.obj", Files.FileType.internal),
+                new ObjectShader(new Fi("shaders/objecttype/shader.vert", Files.FileType.internal),
+                        new Fi("shaders/objecttype/shader.frag", Files.FileType.internal))));
+
+        Vars.renderer3D.models.addAll(ObjectModelFactory.create(new Fi("models/polar/polar.obj", Files.FileType.internal),
                 new ObjectShader(new Fi("shaders/objecttype/shader.vert", Files.FileType.internal),
                         new Fi("shaders/objecttype/shader.frag", Files.FileType.internal))));
 
@@ -41,8 +47,7 @@ public class Tests extends ApplicationCore {
 
     @Override
     public void update() {
-
-        Gl.clearColor(0.f, 0.f, 0.f, 1f);
+        Gl.clearColor(0f, 0f, 0f, 0f);
         Gl.clear(Gl.colorBufferBit);
 
         Vars.renderer3D.render();

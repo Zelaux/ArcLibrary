@@ -11,6 +11,8 @@ public class OBJ {
 
     public float[] vertices;
 
+    public String name;
+
     public OBJ(Fi file) {
         this.file = file;
     }

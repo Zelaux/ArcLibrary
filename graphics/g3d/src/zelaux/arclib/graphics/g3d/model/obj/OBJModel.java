@@ -79,6 +79,7 @@ public class OBJModel implements Model {
         disposeMesh();
     }
 
+    // TODO maybe... use reflection?
     @Override
     public OBJModel cloneModel() {
         return new OBJModel(obj, mtl, texture, shader);

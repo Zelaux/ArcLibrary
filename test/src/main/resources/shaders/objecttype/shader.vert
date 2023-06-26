@@ -9,6 +9,6 @@ uniform mat4 u_transf;
 uniform vec3 u_transl;
 
 void main(){
-    v_texCoords = a_texCoord0;
+    v_texCoords = vec2(a_texCoord0.x, 1.0 - a_texCoord0.y);
     gl_Position = u_proj * u_transf * (a_position + vec4(u_transl, 0.0));
 }
