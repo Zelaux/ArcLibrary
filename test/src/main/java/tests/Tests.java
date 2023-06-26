@@ -28,6 +28,12 @@ public class Tests extends ApplicationCore {
     public void setup() {
         Time.mark();
 
+        Vars.renderer3D = new GenericRenderer3D();
+        Vars.renderer3D.init();
+        Vars.renderer3D.models.addAll(ObjectModelFactory.create(new Fi("models/cube/models.obj", Files.FileType.internal),
+                new ObjectShader(new Fi("shaders/objecttype/shader.vert", Files.FileType.internal),
+                        new Fi("shaders/objecttype/shader.frag", Files.FileType.internal))));
+
         Core.batch = new SortedSpriteBatch();
 
         Log.info("[Tests] Setup time: @ms", Time.elapsed());
@@ -35,13 +41,6 @@ public class Tests extends ApplicationCore {
 
     @Override
     public void update() {
-        if (Vars.renderer3D == null) {
-            Vars.renderer3D = new GenericRenderer3D();
-            Vars.renderer3D.init();
-            Vars.renderer3D.model = ObjectModelFactory.create(new Fi("models/cube/models.obj", Files.FileType.internal),
-                    new ObjectShader(new Fi("shaders/objecttype/shader.vert", Files.FileType.internal),
-                            new Fi("shaders/objecttype/shader.frag", Files.FileType.internal))).first();
-        }
 
         Gl.clearColor(0.f, 0.f, 0.f, 1f);
         Gl.clear(Gl.colorBufferBit);

@@ -3,6 +3,7 @@ package zelaux.arclib.graphics.g3d.model;
 import arc.util.Disposable;
 import zelaux.arclib.graphics.g3d.render.Renderer3D;
 
+/** Interface for models. **/
 public interface Model extends Disposable {
     /** Render model.
      * @param renderer renderer that's renders this model

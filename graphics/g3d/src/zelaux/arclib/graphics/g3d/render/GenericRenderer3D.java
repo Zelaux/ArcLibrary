@@ -10,11 +10,11 @@ import arc.graphics.g3d.VertexBatch3D;
 import arc.graphics.gl.FrameBuffer;
 import arc.graphics.gl.Shader;
 import arc.math.geom.Mat3D;
+import arc.struct.Seq;
 import zelaux.arclib.graphics.g3d.model.Model;
 
+/** Example 3D renderer. **/
 public class GenericRenderer3D implements Renderer3D{
-    public Model model;
-
     public final Camera3D cam = new Camera3D();
     public final VertexBatch3D batch = new VertexBatch3D(20000, false, true, 0);
 
@@ -23,6 +23,9 @@ public class GenericRenderer3D implements Renderer3D{
 
     public final FrameBuffer buffer = new FrameBuffer(2, 2, true);
     public Shader bufferShader;
+
+    /** Models list. **/
+    public Seq<Model> models = new Seq<>();
 
     public GenericRenderer3D() {
 
@@ -71,7 +74,9 @@ public class GenericRenderer3D implements Renderer3D{
 
         buffer.begin(Color.clear);
 
-        model.render(this);
+        models.each(model -> {
+            model.render(this);
+        });
 
         batch.flush(Gl.triangles);
 
@@ -86,6 +91,9 @@ public class GenericRenderer3D implements Renderer3D{
         Draw.blit(buffer, bufferShader);
     }
 
+    /**
+     * @return shader for frame buffer drawing
+     **/
     public static Shader createShader(){
         return new Shader(
                 "attribute vec4 a_position;\n" +
