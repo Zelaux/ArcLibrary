@@ -10,7 +10,7 @@ xcode/native/
 build/
 bin/
 target/
-obj/
+/obj/
 out/
 classes/
 war/
