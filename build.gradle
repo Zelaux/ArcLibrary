@@ -15,7 +15,7 @@ libraries.arcCore=libraries.getArc("arc-core")
 
 allprojects{
     apply plugin: 'maven-publish'
-    group = 'com.github.Anuken'
+    group = 'com.github.Zelaux.ZelauxArcLib'
     version = '1.0'
 
     buildscript{
@@ -28,10 +28,11 @@ allprojects{
     }
 
     repositories{
+        mavenLocal()
+        google()
         mavenCentral()
         maven{ url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        maven{ url "https://teavm.org/maven/repository" }
-        google()
+        maven{ url "https://oss.sonatype.org/content/repositories/releases/" }
         maven{ url 'https://jitpack.io' }
     }
 
@@ -50,7 +51,7 @@ allprojects{
     }
 }
 
-subprojects{
+configure(subprojects - project(":test")) {
     apply plugin: "java-library"
 
     compileJava{
@@ -63,9 +64,9 @@ subprojects{
         withSourcesJar()
     }
 
-    publishing{
-        publications{
-            maven(MavenPublication){
+    publishing {
+        publications {
+            maven(MavenPublication) {
                 from components.java
             }
         }
