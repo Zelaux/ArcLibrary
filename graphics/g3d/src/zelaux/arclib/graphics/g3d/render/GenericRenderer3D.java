@@ -9,8 +9,13 @@ import arc.graphics.g3d.PlaneBatch3D;
 import arc.graphics.g3d.VertexBatch3D;
 import arc.graphics.gl.FrameBuffer;
 import arc.graphics.gl.Shader;
+import arc.input.InputProcessor;
+import arc.input.KeyCode;
+import arc.math.Mathf;
 import arc.math.geom.Mat3D;
+import arc.math.geom.Vec3;
 import arc.struct.Seq;
+import arc.util.Log;
 import zelaux.arclib.graphics.g3d.model.Model;
 
 /** Example 3D renderer. **/
@@ -26,6 +31,11 @@ public class GenericRenderer3D implements Renderer3D{
 
     /** Models list. **/
     public Seq<Model> models = new Seq<>();
+
+    Vec3 cameraPos = new Vec3();
+    Vec3 cameraVel = new Vec3();
+    Vec3 cameraRot = new Vec3(1f, 1f, 1f);
+    float zoom = 1f;
 
     public GenericRenderer3D() {
 
@@ -43,6 +53,26 @@ public class GenericRenderer3D implements Renderer3D{
         cam.fov = 100f;
 
         projector.setScaling(1 / 10000f);
+
+        bufferShader = createShader();
+
+        Core.input.addProcessor(new InputProcessor() {
+            @Override
+            public boolean keyDown(KeyCode keycode) {
+                return InputProcessor.super.keyDown(keycode);
+            }
+
+            @Override
+            public boolean keyUp(KeyCode keycode) {
+                return InputProcessor.super.keyUp(keycode);
+            }
+
+            @Override
+            public boolean scrolled(float amountX, float amountY) {
+                zoom = Mathf.clamp(zoom + amountY * 0.1f * Mathf.clamp(zoom, 0.1f, 10000f), 0.1f, 10000f);
+                return false;
+            }
+        });
     }
 
     @Override
@@ -52,13 +82,11 @@ public class GenericRenderer3D implements Renderer3D{
 
     @Override
     public void render() {
-        if (bufferShader == null) {
-            bufferShader = createShader();
-        }
+        cameraPos.add(cameraVel);
 
         cam.resize(Core.graphics.getWidth(), Core.graphics.getHeight());
-        cam.position.set(0, 0, 10);
-        cam.lookAt(0, 0, 0);
+        cam.lookAt(cameraPos);
+        cam.position.set(cameraRot).scl(zoom).add(cameraPos);
         cam.update();
 
         projector.proj(cam.combined);

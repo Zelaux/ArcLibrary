@@ -1,7 +1,6 @@
 package tests;
 
 import arc.ApplicationCore;
-import arc.ApplicationListener;
 import arc.Core;
 import arc.Files;
 import arc.backend.sdl.SdlApplication;
@@ -15,8 +14,13 @@ import zelaux.arclib.graphics.g3d.model.obj.ObjectModelFactory;
 import zelaux.arclib.graphics.g3d.model.obj.ObjectShader;
 import zelaux.arclib.graphics.g3d.render.GenericRenderer3D;
 
+import java.io.IOException;
+
 public class Tests extends ApplicationCore {
     public static void main(String[] args) {
+        /*Log.info(new BigNumber(4).set(0b11).right());
+        Log.info(new BigNumber(4).set(0b10).mul(new BigNumber(4).set(0b11)));*/
+
         new SdlApplication(new Tests(), new SdlConfig(){{
             gl30 = true;
             title = "G3D test";
@@ -28,13 +32,15 @@ public class Tests extends ApplicationCore {
     public void setup() {
         Time.mark();
 
-
-
         Vars.renderer3D = new GenericRenderer3D();
         Vars.renderer3D.init();
-        Vars.renderer3D.models.addAll(ObjectModelFactory.create(new Fi("models/suz/suz.obj", Files.FileType.internal),
-                new ObjectShader(new Fi("shaders/objecttype/shader.vert", Files.FileType.internal),
-                        new Fi("shaders/objecttype/shader.frag", Files.FileType.internal))));
+        try {
+            Vars.renderer3D.models.addAll(ObjectModelFactory.create(new Fi("models/suz/suz.obj", Files.FileType.internal),
+                    new ObjectShader(new Fi("shaders/objecttype/shader.vert", Files.FileType.internal),
+                            new Fi("shaders/objecttype/shader.frag", Files.FileType.internal))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Core.batch = new SortedSpriteBatch();
 

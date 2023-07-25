@@ -3,25 +3,19 @@ package zelaux.arclib.graphics.g3d.model.obj.mtl;
 import arc.files.Fi;
 import arc.struct.Seq;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+
 /** For models parsing use {@link zelaux.arclib.graphics.g3d.model.obj.ObjectModelFactory} **/
 public class MTLParser {
-    /** File for parse. **/
-    public Fi file;
-
-    public MTLParser(Fi file) {
-        this.file = file;
-    }
-
-    /** Parse raw materials from {@link MTLParser#file} **/
-    public Seq<MTL> parse() {
+    /** @param file file for parsing **/
+    public static Seq<MTL> parse(Fi file) throws IOException {
         Seq<MTL> out = new Seq<>();
         MTL currentMTL = null;
 
-        String string = file.readString();
-        string = string.replaceAll("\r", "");
-        Seq<String> lines = new Seq<>(string.split("\n"));
-
-        for (String line : lines) {
+        BufferedReader lines = new BufferedReader(file.reader());
+        String line;
+        while ((line = lines.readLine()) != null) {
             if (line.split(" ").length < 2)
                 continue;
             String k = line.split(" ")[0];

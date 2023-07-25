@@ -7,18 +7,14 @@ import arc.struct.FloatSeq;
 import arc.struct.IntSeq;
 import arc.struct.Seq;
 
+import java.io.*;
+import java.util.stream.Stream;
+
 // FIXME a lot of garbage
 /** For models parsing use {@link zelaux.arclib.graphics.g3d.model.obj.ObjectModelFactory} **/
 public class OBJParser {
-    /** File for parse. **/
-    public Fi file;
-
-    public OBJParser(Fi file) {
-        this.file = file;
-    }
-
-    /** Parse raw objects from {@link OBJParser#file}. **/
-    public Seq<OBJ> parse() {
+    /** @param file file for parsing **/
+    public static Seq<OBJ> parse(Fi file) throws IOException{
         Seq<OBJ> out = new Seq<>();
         OBJ currentObj = null;
         Fi mtlLib = null;
@@ -30,10 +26,9 @@ public class OBJParser {
         IntSeq facesIndexes = new IntSeq();
         FloatSeq vertices = new FloatSeq();
 
-        String data = file.readString();
-
-        Seq<String> lines = new Seq<>(data.split("\n"));
-        for (String line: lines) {
+        BufferedReader lines = new BufferedReader(file.reader());
+        String line;
+        while ((line = lines.readLine()) != null) {
             Seq<String> args = new Seq<>(line.split(" "));
             String key = args.first();
             args.remove(0);
@@ -89,7 +84,7 @@ public class OBJParser {
     }
 
     /** Constructs object's vertices. **/
-    void constructObj(OBJ obj, IntSeq facesIndexes, Seq<Vec3> vs,
+    static void constructObj(OBJ obj, IntSeq facesIndexes, Seq<Vec3> vs,
                              Seq<Vec2> vts, Seq<Vec3> vns, FloatSeq vertices) {
         for (int i = 0; i < facesIndexes.size; i += 3) {
             Vec3 v = vs.get(facesIndexes.get(i)-1);
