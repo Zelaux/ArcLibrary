@@ -85,8 +85,9 @@ public class GenericRenderer3D implements Renderer3D{
         cameraPos.add(cameraVel);
 
         cam.resize(Core.graphics.getWidth(), Core.graphics.getHeight());
-        cam.lookAt(cameraPos);
         cam.position.set(cameraRot).scl(zoom).add(cameraPos);
+        cam.lookAt(cameraPos);
+
         cam.update();
 
         projector.proj(cam.combined);
