@@ -6,6 +6,7 @@ import arc.math.geom.Vec3;
 import arc.struct.FloatSeq;
 import arc.struct.IntSeq;
 import arc.struct.Seq;
+import arc.util.Log;
 
 import java.io.*;
 
@@ -77,6 +78,12 @@ public class OBJParser{
         }
 
         finishObject(out, currentObj);
+
+        if (currentObj == null) {
+            Log.warn("You fucking loser! Your .obj file corrupted!");
+            reset();
+        }
+
         return out;
     }
 
