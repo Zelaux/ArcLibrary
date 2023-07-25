@@ -55,24 +55,6 @@ public class GenericRenderer3D implements Renderer3D{
         projector.setScaling(1 / 10000f);
 
         bufferShader = createShader();
-
-        Core.input.addProcessor(new InputProcessor() {
-            @Override
-            public boolean keyDown(KeyCode keycode) {
-                return InputProcessor.super.keyDown(keycode);
-            }
-
-            @Override
-            public boolean keyUp(KeyCode keycode) {
-                return InputProcessor.super.keyUp(keycode);
-            }
-
-            @Override
-            public boolean scrolled(float amountX, float amountY) {
-                zoom = Mathf.clamp(zoom + amountY * 0.1f * Mathf.clamp(zoom, 0.1f, 10000f), 0.1f, 10000f);
-                return false;
-            }
-        });
     }
 
     @Override
