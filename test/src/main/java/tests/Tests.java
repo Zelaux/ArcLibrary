@@ -39,14 +39,10 @@ public class Tests extends ApplicationCore{
 
         TestVars.renderer3D = new TestRenderer3D();
         TestVars.renderer3D.init();
-        try{
-            TestVars.renderer3D.models.addAll(ObjectModelFactory.create(new Fi("models/cube/models.obj", Files.FileType.internal),
+        TestVars.renderer3D.models.addAll(ObjectModelFactory.create(new Fi("models/cube/models.obj", Files.FileType.internal),
 //            TestVars.renderer3D.models.addAll(ObjectModelFactory.create(new Fi("models/polar/polar.obj", Files.FileType.internal),
-            new ObjectShader(new Fi("shaders/objecttype/shader.vert", Files.FileType.internal),
-            new Fi("shaders/objecttype/shader.frag", Files.FileType.internal))));
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+        new ObjectShader(new Fi("shaders/objecttype/shader.vert", Files.FileType.internal),
+        new Fi("shaders/objecttype/shader.frag", Files.FileType.internal))));
 
         Core.batch = new SortedSpriteBatch();
 

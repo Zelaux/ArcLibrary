@@ -2,54 +2,59 @@ package zelaux.arclib.graphics.g3d.model.obj;
 
 import arc.files.Fi;
 import arc.graphics.Texture;
-import arc.graphics.gl.Shader;
-import arc.struct.Seq;
-import arc.util.ArcRuntimeException;
-import arc.util.Log;
+import arc.struct.*;
+import arc.util.*;
 import zelaux.arclib.graphics.g3d.model.obj.mtl.MTL;
 import zelaux.arclib.graphics.g3d.model.obj.mtl.MTLParser;
 import zelaux.arclib.graphics.g3d.model.obj.obj.OBJ;
 import zelaux.arclib.graphics.g3d.model.obj.obj.OBJParser;
 
 import java.io.IOException;
+import java.util.*;
 
 /** Use it for models parsing. **/
-public class ObjectModelFactory {
-    public static Seq<MTL> loadedMTLs = new Seq<>();
-    public static Seq<OBJ> loadedOBJs = new Seq<>();
-    public static Seq<OBJModel> loadedModels = new Seq<>();
+public class ObjectModelFactory{
+    private static final MaterialCache loadedMTLs = new MaterialCache();
 
-    /** Loads models from given object file.
+    /**
+     * Loads models from given object file.
      * @param objFile .obj file
      * @param shader model's shaders
      **/
-    public static Seq<OBJModel> create(Fi objFile, ObjectShader shader) throws IOException {
-
-
+    public static Seq<OBJModel> create(Fi objFile, ObjectShader shader) {
         Seq<OBJModel> out = new Seq<>();
-
         Seq<OBJ> objs = OBJParser.parse(objFile);
-        loadedOBJs.addAll(objs);
-
-        Seq<MTL> mtls = objs.flatMap(o -> {
-            try {
-                MTL mtl = loadedMTLs.find(m -> m.file.equals(o.mtlFile) && m.name.equals(o.mtlName));
-                if (mtl != null)
-                    return Seq.with(mtl);
-                Seq<MTL> mtlz = MTLParser.parse(o.mtlFile);
-                loadedMTLs.addAll(mtlz);
-                return mtlz;
-            } catch (IOException e) {
-                throw new ArcRuntimeException(e);
+        for(int i = 0; i < objs.size; i++){
+            OBJ obj = objs.get(i);
+            MTL found = loadedMTLs.get(obj.mtlFile, obj.mtlName);
+            if(found == null){
+                Seq<MTL> mtlz = MTLParser.parse(obj.mtlFile);
+                loadedMTLs.register(obj.mtlFile, mtlz);
+                found = Objects.requireNonNull(loadedMTLs.get(obj.mtlFile, obj.mtlName), "null material");
             }
-        });
-
-        objs.each(obj -> {
-            MTL objMtl = mtls.find(mtl -> mtl.file.equals(obj.mtlFile) && mtl.name.equals(obj.mtlName));
-            Texture objMtlTexture = new Texture(objMtl.file.parent().child(objMtl.get("map_Kd")));
-            out.add(new OBJModel(obj, objMtl, objMtlTexture, shader));
-        });
+            Texture objMtlTexture = new Texture(found.file.parent().child(found.get("map_Kd")));
+            out.add(new OBJModel(obj, found, objMtlTexture, shader));
+        }
 
         return out;
+    }
+
+    private static class MaterialCache{
+        private static final ObjectMap<String, ObjectMap<String, MTL>> map = new ObjectMap<>();
+
+        private static String getKey(MTL it){
+            return it.name;
+        }
+
+        @Nullable
+        public MTL get(Fi file, String name){
+            ObjectMap<String, MTL> entries = map.get(file.absolutePath());
+            if(entries == null) return null;
+            return entries.get(name);
+        }
+
+        public void register(Fi file, Seq<MTL> materials){
+            map.put(file.absolutePath(), materials.asMap(MaterialCache::getKey));
+        }
     }
 }

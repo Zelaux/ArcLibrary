@@ -2,34 +2,37 @@ package zelaux.arclib.graphics.g3d.model.obj.mtl;
 
 import arc.files.Fi;
 import arc.struct.Seq;
+import arc.util.*;
+import arc.util.io.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.*;
 
 /** For models parsing use {@link zelaux.arclib.graphics.g3d.model.obj.ObjectModelFactory} **/
-public class MTLParser {
+public class MTLParser{
+
     /** @param file file for parsing **/
-    public static Seq<MTL> parse(Fi file) throws IOException {
+    public static Seq<MTL> parse(Fi file){
         Seq<MTL> out = new Seq<>();
         MTL currentMTL = null;
 
-        BufferedReader lines = new BufferedReader(file.reader());
-        String line;
-        while ((line = lines.readLine()) != null) {
-            if (line.split(" ").length < 2)
-                continue;
-            String k = line.split(" ")[0];
-            String v = line.split(" ")[1];
-            if (k.equals("#") || k.equals(""))
-                continue;
-            if (k.equals("newmtl")) {
-                currentMTL = new MTL(file, v);
-                out.add(currentMTL);
-            } else {
-                currentMTL.set(k, v);
+        try(BufferedReader lines = file.reader(1 << 13)){
+            String line;
+            while((line = lines.readLine()) != null){
+                int spaceIndex = line.indexOf(' ');
+                if(line.matches("[#\\s].+") || spaceIndex == -1)
+                    continue;
+                if(line.startsWith("newmtl ")){
+                    currentMTL = new MTL(file, line.substring("newmtl ".length()));
+                    out.add(currentMTL);
+                }else{
+                    String k = line.substring(0, spaceIndex);
+                    String v = line.substring(spaceIndex + 1);
+                    currentMTL.set(k, v);
+                }
             }
+            return out;
+        }catch(IOException e){
+            throw new RuntimeException(e);
         }
-
-        return out;
     }
 }
