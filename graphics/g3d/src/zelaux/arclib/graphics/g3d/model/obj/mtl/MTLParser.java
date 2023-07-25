@@ -23,8 +23,7 @@ public class MTLParser {
             if (k.equals("#") || k.equals(""))
                 continue;
             if (k.equals("newmtl")) {
-                currentMTL = new MTL(file);
-                currentMTL.set("name", v);
+                currentMTL = new MTL(file, v);
                 out.add(currentMTL);
             } else {
                 currentMTL.set(k, v);

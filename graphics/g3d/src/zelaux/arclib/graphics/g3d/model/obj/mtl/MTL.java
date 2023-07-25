@@ -6,11 +6,13 @@ import arc.struct.ObjectMap;
 /** Material data container. **/
 public class MTL {
     public final Fi file;
+    public final String name;
 
     public final ObjectMap<String, String> data = new ObjectMap<>();
 
-    public MTL(Fi file) {
+    public MTL(Fi file, String name) {
         this.file = file;
+        this.name = name;
     }
 
     public String get(String key) {
