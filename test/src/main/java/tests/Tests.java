@@ -18,9 +18,6 @@ import java.io.IOException;
 
 public class Tests extends ApplicationCore {
     public static void main(String[] args) {
-        /*Log.info(new BigNumber(4).set(0b11).right());
-        Log.info(new BigNumber(4).set(0b10).mul(new BigNumber(4).set(0b11)));*/
-
         new SdlApplication(new Tests(), new SdlConfig(){{
             gl30 = true;
             title = "G3D test";
