@@ -12,6 +12,7 @@ import arc.input.*;
 import arc.math.*;
 import arc.util.Log;
 import arc.util.Time;
+import tests.core.*;
 import zelaux.arclib.graphics.g3d.model.obj.ObjectModelFactory;
 import zelaux.arclib.graphics.g3d.model.obj.ObjectShader;
 import zelaux.arclib.graphics.g3d.render.GenericRenderer3D;
@@ -34,10 +35,10 @@ public class Tests extends ApplicationCore{
     public void setup(){
         Time.mark();
 
-        Vars.renderer3D = new GenericRenderer3D();
-        Vars.renderer3D.init();
+        TestVars.renderer3D = new TestRenderer3D();
+        TestVars.renderer3D.init();
         try{
-            Vars.renderer3D.models.addAll(ObjectModelFactory.create(new Fi("models/suz/suz.obj", Files.FileType.internal),
+            TestVars.renderer3D.models.addAll(ObjectModelFactory.create(new Fi("models/suz/suz.obj", Files.FileType.internal),
             new ObjectShader(new Fi("shaders/objecttype/shader.vert", Files.FileType.internal),
             new Fi("shaders/objecttype/shader.frag", Files.FileType.internal))));
         }catch(IOException e){
@@ -62,7 +63,7 @@ public class Tests extends ApplicationCore{
 
             @Override
             public boolean scrolled(float amountX, float amountY){
-                Vars.renderer3D.zoom = Mathf.clamp(Vars.renderer3D.zoom + amountY * 0.1f * Mathf.clamp(Vars.renderer3D.zoom, 0.1f, 10000f), 0.1f, 10000f);
+                TestVars.renderer3D.zoom = Mathf.clamp(TestVars.renderer3D.zoom + amountY * 0.1f * Mathf.clamp(TestVars.renderer3D.zoom, 0.1f, 10000f), 0.1f, 10000f);
                 return false;
             }
         });
@@ -73,6 +74,6 @@ public class Tests extends ApplicationCore{
         Gl.clearColor(0f, 0f, 0f, 0f);
         Gl.clear(Gl.colorBufferBit);
 
-        Vars.renderer3D.render();
+        TestVars.renderer3D.render();
     }
 }

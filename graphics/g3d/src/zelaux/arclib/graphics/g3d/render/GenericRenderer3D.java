@@ -24,18 +24,12 @@ public class GenericRenderer3D implements Renderer3D{
     public final VertexBatch3D batch = new VertexBatch3D(20000, false, true, 0);
 
     public final PlaneBatch3D projector = new PlaneBatch3D();
-    public final Mat3D mat = new Mat3D();
 
     public final FrameBuffer buffer = new FrameBuffer(2, 2, true);
     public Shader bufferShader;
 
     /** Models list. **/
     public Seq<Model> models = new Seq<>();
-
-    Vec3 cameraPos = new Vec3();
-    Vec3 cameraVel = new Vec3();
-    Vec3 cameraRot = new Vec3(1f, 1f, 1f);
-    public float zoom = 1f;
 
     public GenericRenderer3D(){
 
@@ -64,12 +58,6 @@ public class GenericRenderer3D implements Renderer3D{
 
     @Override
     public void render(){
-        cameraPos.add(cameraVel);
-
-        cam.resize(Core.graphics.getWidth(), Core.graphics.getHeight());
-        cam.position.set(cameraRot).scl(zoom).add(cameraPos);
-        cam.lookAt(cameraPos);
-
         cam.update();
 
         projector.proj(cam.combined);
