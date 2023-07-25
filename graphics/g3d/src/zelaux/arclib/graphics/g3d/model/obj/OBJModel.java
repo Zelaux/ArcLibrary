@@ -11,7 +11,7 @@ import zelaux.arclib.graphics.g3d.model.obj.mtl.MTL;
 import zelaux.arclib.graphics.g3d.model.obj.obj.OBJ;
 import zelaux.arclib.graphics.g3d.render.Renderer3D;
 
-public class OBJModel implements Model {
+public class OBJModel implements Model{
     public Texture texture;
     public Mesh mesh;
     public ObjectShader shader;
@@ -24,7 +24,7 @@ public class OBJModel implements Model {
     /** Translation vector. **/
     public Vec3 translation = new Vec3();
 
-    public OBJModel(OBJ obj, MTL mtl, Texture texture, ObjectShader shader) {
+    public OBJModel(OBJ obj, MTL mtl, Texture texture, ObjectShader shader){
         this.mtl = mtl;
         this.obj = obj;
         this.texture = texture;
@@ -33,7 +33,7 @@ public class OBJModel implements Model {
     }
 
     @Override
-    public void render(Renderer3D renderer) {
+    public void render(Renderer3D renderer){
         texture.bind();
         shader.bind();
 
@@ -45,32 +45,32 @@ public class OBJModel implements Model {
         mesh.render(shader, Gl.triangles);
     }
 
-    public void rebuildMesh() {
+    public void rebuildMesh(){
         disposeMesh();
         mesh = new Mesh(true, obj.vertices.length, 0,
-                VertexAttribute.position3, VertexAttribute.texCoords, VertexAttribute.normal);
+        VertexAttribute.position3, VertexAttribute.texCoords, VertexAttribute.normal);
 
         mesh.getVerticesBuffer().limit(obj.vertices.length);
         mesh.getVerticesBuffer().put(obj.vertices, 0, obj.vertices.length);
     }
 
-    public void disposeMesh() {
-        if (mesh != null)
+    public void disposeMesh(){
+        if(mesh != null)
             mesh.dispose();
     }
 
-    public void disposeShader() {
-        if (shader != null)
+    public void disposeShader(){
+        if(shader != null)
             shader.dispose();
     }
 
-    public void disposeTexture() {
-        if (texture != null)
+    public void disposeTexture(){
+        if(texture != null)
             texture.dispose();
     }
 
     @Override
-    public void dispose() {
+    public void dispose(){
         Model.super.dispose();
         disposeTexture();
         disposeShader();
@@ -79,7 +79,37 @@ public class OBJModel implements Model {
 
     // TODO maybe... use reflection?
     @Override
-    public OBJModel cloneModel() {
+    public OBJModel cloneModel(){
         return new OBJModel(obj, mtl, texture, shader);
+    }
+
+    @Override
+    public ObjectShader getShader(){
+        return shader;
+    }
+
+    @Override
+    public void setShader(ObjectShader shader){
+        this.shader = shader;
+    }
+
+    @Override
+    public Mat3D getTransformation(){
+        return transformation;
+    }
+
+    @Override
+    public void setTransformation(Mat3D transformation){
+        this.transformation = transformation;
+    }
+
+    @Override
+    public Vec3 getTranslation(){
+        return translation;
+    }
+
+    @Override
+    public void setTranslation(Vec3 translation){
+        this.translation = translation;
     }
 }

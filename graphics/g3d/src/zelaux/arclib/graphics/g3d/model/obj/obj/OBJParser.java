@@ -1,6 +1,7 @@
 package zelaux.arclib.graphics.g3d.model.obj.obj;
 
 import arc.files.Fi;
+import arc.func.*;
 import arc.math.geom.Vec2;
 import arc.math.geom.Vec3;
 import arc.struct.FloatSeq;
@@ -8,9 +9,6 @@ import arc.struct.IntSeq;
 import arc.struct.Seq;
 
 import java.io.*;
-
-// FIXME a lot of garbage
-
 /** For models parsing use {@link zelaux.arclib.graphics.g3d.model.obj.ObjectModelFactory} **/
 public class OBJParser{
     static Seq<Vec3> vs = new Seq<>(), vns = new Seq<>();
@@ -48,17 +46,17 @@ public class OBJParser{
                         break;
                     case "v":{
                         float[] vert = getFloats(args);
-                        vs.add(new Vec3(vert));
+                        addOrGet(vs,Vec3::new).set(vert);
                         break;
                     }
                     case "vt":{
                         float[] vert = getFloats(args);
-                        vts.add(new Vec2(vert[0], vert[1]));
+                        addOrGet(vts,Vec2::new).set(vert[0],vert[1]);
                         break;
                     }
                     case "vn":{
                         float[] vert = getFloats(args);
-                        vns.add(new Vec3(vert));
+                        addOrGet(vns,Vec3::new).set(vert);
                         break;
                     }
                     case "usemtl":
@@ -80,6 +78,20 @@ public class OBJParser{
         return out;
     }
 
+    private static <T> T addOrGet(Seq<T> vs, Prov<T> constructor){
+        if(vs.items.length==vs.size+1){
+            vs.add(constructor.get());
+
+        }
+        for(int i = 0; i < vs.items.length; i++){
+            if(vs.items[i]==null){
+                vs.items[i]=constructor.get();
+            }
+        }
+        vs.size++;
+        return vs.peek();
+    }
+
     private static void finishObject(Seq<OBJ> out, OBJ currentObj){
         if(currentObj != null){
             out.add(currentObj);
@@ -91,9 +103,9 @@ public class OBJParser{
 
     private static void reset(){
         facesIndexes.clear();
-        vs.clear();
-        vts.clear();
-        vns.clear();
+        vs.size=0;
+        vts.size=0;
+        vns.size=0;
         vertices.clear();
     }
 
