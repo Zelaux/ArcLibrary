@@ -77,7 +77,6 @@ public class OBJParser{
         }
 
         finishObject(out, currentObj);
-        reset();
         return out;
     }
 
