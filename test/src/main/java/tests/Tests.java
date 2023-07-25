@@ -8,6 +8,8 @@ import arc.backend.sdl.SdlConfig;
 import arc.files.Fi;
 import arc.graphics.Gl;
 import arc.graphics.g2d.SortedSpriteBatch;
+import arc.input.*;
+import arc.math.*;
 import arc.util.Log;
 import arc.util.Time;
 import zelaux.arclib.graphics.g3d.model.obj.ObjectModelFactory;
@@ -16,8 +18,8 @@ import zelaux.arclib.graphics.g3d.render.GenericRenderer3D;
 
 import java.io.IOException;
 
-public class Tests extends ApplicationCore {
-    public static void main(String[] args) {
+public class Tests extends ApplicationCore{
+    public static void main(String[] args){
         /*Log.info(new BigNumber(4).set(0b11).right());
         Log.info(new BigNumber(4).set(0b10).mul(new BigNumber(4).set(0b11)));*/
 
@@ -29,26 +31,45 @@ public class Tests extends ApplicationCore {
     }
 
     @Override
-    public void setup() {
+    public void setup(){
         Time.mark();
 
         Vars.renderer3D = new GenericRenderer3D();
         Vars.renderer3D.init();
-        try {
+        try{
             Vars.renderer3D.models.addAll(ObjectModelFactory.create(new Fi("models/suz/suz.obj", Files.FileType.internal),
-                    new ObjectShader(new Fi("shaders/objecttype/shader.vert", Files.FileType.internal),
-                            new Fi("shaders/objecttype/shader.frag", Files.FileType.internal))));
-        } catch (IOException e) {
+            new ObjectShader(new Fi("shaders/objecttype/shader.vert", Files.FileType.internal),
+            new Fi("shaders/objecttype/shader.frag", Files.FileType.internal))));
+        }catch(IOException e){
             e.printStackTrace();
         }
 
         Core.batch = new SortedSpriteBatch();
 
         Log.info("[Tests] Setup time: @ms", Time.elapsed());
+
+
+        Core.input.addProcessor(new InputProcessor(){
+            @Override
+            public boolean keyDown(KeyCode keycode){
+                return InputProcessor.super.keyDown(keycode);
+            }
+
+            @Override
+            public boolean keyUp(KeyCode keycode){
+                return InputProcessor.super.keyUp(keycode);
+            }
+
+            @Override
+            public boolean scrolled(float amountX, float amountY){
+                Vars.renderer3D.zoom = Mathf.clamp(Vars.renderer3D.zoom + amountY * 0.1f * Mathf.clamp(Vars.renderer3D.zoom, 0.1f, 10000f), 0.1f, 10000f);
+                return false;
+            }
+        });
     }
 
     @Override
-    public void update() {
+    public void update(){
         Gl.clearColor(0f, 0f, 0f, 0f);
         Gl.clear(Gl.colorBufferBit);
 

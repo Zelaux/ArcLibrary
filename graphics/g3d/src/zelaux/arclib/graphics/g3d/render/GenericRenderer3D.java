@@ -35,19 +35,19 @@ public class GenericRenderer3D implements Renderer3D{
     Vec3 cameraPos = new Vec3();
     Vec3 cameraVel = new Vec3();
     Vec3 cameraRot = new Vec3(1f, 1f, 1f);
-    float zoom = 1f;
+    public float zoom = 1f;
 
-    public GenericRenderer3D() {
+    public GenericRenderer3D(){
 
     }
 
     @Override
-    public Mat3D getProjMat() {
+    public Mat3D getProjMat(){
         return cam.combined;
     }
 
     @Override
-    public void init() {
+    public void init(){
         cam.near = 0.1f;
         cam.far = 10000f;
         cam.fov = 100f;
@@ -58,12 +58,12 @@ public class GenericRenderer3D implements Renderer3D{
     }
 
     @Override
-    public boolean shouldRender() {
+    public boolean shouldRender(){
         return true;
     }
 
     @Override
-    public void render() {
+    public void render(){
         cameraPos.add(cameraVel);
 
         cam.resize(Core.graphics.getWidth(), Core.graphics.getHeight());
@@ -107,18 +107,18 @@ public class GenericRenderer3D implements Renderer3D{
      **/
     public static Shader createShader(){
         return new Shader(
-                "attribute vec4 a_position;\n" +
-                        "attribute vec2 a_texCoord0;\n" +
-                        "varying vec2 v_texCoords;\n" +
-                        "void main(){\n" +
-                        "   v_texCoords = a_texCoord0;\n" +
-                        "   gl_Position = a_position;\n" +
-                        "}",
-                "uniform sampler2D u_texture;\n" +
-                        "varying vec2 v_texCoords;\n" +
-                        "void main(){\n" +
-                        "  gl_FragColor = texture2D(u_texture, v_texCoords);\n" +
-                        "}"
+        "attribute vec4 a_position;\n" +
+        "attribute vec2 a_texCoord0;\n" +
+        "varying vec2 v_texCoords;\n" +
+        "void main(){\n" +
+        "   v_texCoords = a_texCoord0;\n" +
+        "   gl_Position = a_position;\n" +
+        "}",
+        "uniform sampler2D u_texture;\n" +
+        "varying vec2 v_texCoords;\n" +
+        "void main(){\n" +
+        "  gl_FragColor = texture2D(u_texture, v_texCoords);\n" +
+        "}"
         );
     }
 }
