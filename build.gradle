@@ -51,7 +51,8 @@ allprojects{
     }
 }
 
-configure(subprojects) {
+def projects = System.getenv("JITPACK") != "true" ? subprojects - project(":test") : subprojects
+configure(projects) {
     apply plugin: "java-library"
 
     compileJava{
