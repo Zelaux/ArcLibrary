@@ -51,7 +51,7 @@ allprojects{
     }
 }
 
-configure(subprojects - project(":test")) {
+configure(subprojects) {
     apply plugin: "java-library"
 
     compileJava{
