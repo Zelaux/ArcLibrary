@@ -2,17 +2,13 @@
 plugins{
     id 'org.jetbrains.kotlin.jvm' version '1.7.10'
 }
-apply plugin: "kotlin"
 sourceSets.main.java.srcDirs = ["src"]
-sourceSets.main.kotlin.srcDirs = ["src"]
-sourceSets.test.java.srcDirs = ["test"]
 sourceSets.test.resources.srcDirs = ["test/resources"]
 
 dependencies{
     compileOnly libraries.arcCore
 //    testImplementation aproj(":natives:natives-desktop")
 }
-
 test{
     testLogging{
         exceptionFormat = 'full'

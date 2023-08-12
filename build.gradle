@@ -1,4 +1,3 @@
-
 ext{
     versions = [:]
     libraries = [:]
@@ -9,11 +8,12 @@ libraries.jnigen = [
         "com.github.libgdx.gdx-jnigen:gdx-jnigen:$versions.jnigen"
 ]
 libraries.getArc = { String moduleName ->
-    return  "com.github.Anuken.Arc:$moduleName:${versions.arc}"
+    return "com.github.Anuken.Arc:$moduleName:${versions.arc}"
 }
-libraries.arcCore=libraries.getArc("arc-core")
+libraries.arcCore = libraries.getArc("arc-core")
 
 allprojects{
+    if(project.name.startsWith("my")) return;
     apply plugin: 'maven-publish'
     group = 'com.github.Zelaux.ZelauxArcLib'
     version = '1.0'
@@ -34,6 +34,7 @@ allprojects{
         maven{ url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven{ url "https://oss.sonatype.org/content/repositories/releases/" }
         maven{ url 'https://jitpack.io' }
+        maven{ url 'https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository/' }
     }
 
     ext.aproj = { String module ->
@@ -49,10 +50,12 @@ allprojects{
         targetCompatibility = 1.8
         options.encoding = "UTF-8"
     }
+
 }
 
 def projects = System.getenv("JITPACK") != "true" ? subprojects - project(":test") : subprojects
-configure(projects) {
+configure(projects){
+    if(project.name.startsWith("my")) return;
     apply plugin: "java-library"
 
     compileJava{
@@ -65,9 +68,9 @@ configure(projects) {
         withSourcesJar()
     }
 
-    publishing {
-        publications {
-            maven(MavenPublication) {
+    publishing{
+        publications{
+            maven(MavenPublication){
                 from components.java
             }
         }

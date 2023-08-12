@@ -1,4 +1,4 @@
-package zelaux.arclib.utils.files;
+test zelaux.arclib.utils.files;
 
 import arc.files.Fi;
 
