@@ -5,7 +5,7 @@ import arc.scene.style.*;
 import arc.scene.ui.*;
 import arc.scene.ui.layout.*;
 import arclibrary.ui.defaults.DefaultBackground;
-import zelaux.arclib.ui.defaults.*;
+
 
 public class Separators{
     public static Drawable separatorDrawable;

@@ -3,7 +3,6 @@ package arclibrary.graphics.g3d.model;
 import arc.math.geom.*;
 import arc.util.Disposable;
 import arclibrary.graphics.g3d.model.obj.ObjectShader;
-import zelaux.arclib.graphics.g3d.model.obj.*;
 import arclibrary.graphics.g3d.render.Renderer3D;
 
 /** Interface for models. **/

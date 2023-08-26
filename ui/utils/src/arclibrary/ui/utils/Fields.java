@@ -11,7 +11,7 @@ import arc.scene.utils.*;
 import arc.util.*;
 import arclibrary.ui.defaults.DefaultBackground;
 import kotlin.jvm.internal.Ref.*;
-import zelaux.arclib.ui.defaults.*;
+
 
 public class Fields{
     public static String tooBigNumberKey = "too-big-number";
