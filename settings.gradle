@@ -3,7 +3,10 @@ include ":ui:utils"
 include ":ui:tooltips"
 include ":ui:components"
 include ":ui:listeners"
+
 include ":graphics:g3d"
+include ":graphics:draw3d"
+
 include ":utils:files"
 
 include "settings"
@@ -11,5 +14,5 @@ include "settings"
 if(System.getenv("JITPACK") != "true"){
     include "test"
 }
-rootProject.name = 'ZelauxArcLib'
+rootProject.name = 'ArcLibrary'
 

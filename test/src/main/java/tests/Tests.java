@@ -14,10 +14,8 @@ import arc.math.*;
 import arc.math.geom.*;
 import arc.util.*;
 import tests.core.*;
-import zelaux.arclib.graphics.g3d.model.obj.ObjectModelFactory;
-import zelaux.arclib.graphics.g3d.model.obj.ObjectShader;
-
-import java.io.IOException;
+import arclibrary.graphics.g3d.model.obj.ObjectModelFactory;
+import arclibrary.graphics.g3d.model.obj.ObjectShader;
 
 public class Tests extends ApplicationCore{
     public static void main(String[] args){
