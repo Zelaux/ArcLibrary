@@ -25,7 +25,10 @@ public class Draw3d {
     public static void rect(Mat3D mat3D, TextureRegion region, float x, float y, float width, float height, float rotation) {
         float originX = width / 2f;
         float originY = height / 2f;
-        float
+        rect(mat3D, region, x, y, width, height, rotation, originX, originY);
+    }
+
+    public static void rect(Mat3D mat3D, TextureRegion region, float x, float y, float width, float height, float rotation, float originX, float originY) {
         int idx = 0;
         //bottom left and top right corner points relative to origin
         float worldOriginX = x + originX;
