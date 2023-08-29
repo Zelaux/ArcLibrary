@@ -8,6 +8,7 @@ include ":graphics:g3d"
 include ":graphics:draw3d"
 
 include ":utils:files"
+include ":utils:pools"
 
 include "settings"
 

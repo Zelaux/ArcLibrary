@@ -3,7 +3,7 @@ apply {
 }
 
 dependencies{
-    implementation project(":graphics:g3d")
+    implementation aproj(":graphics:g3d")
     implementation libraries.getArc("arc-core")
     implementation libraries.getArc("g3d")
     implementation libraries.getArc("backend-sdl")
