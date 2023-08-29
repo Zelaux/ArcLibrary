@@ -5,25 +5,25 @@ import arc.struct.ObjectMap;
 import arc.struct.Seq;
 import arc.util.pooling.Pool;
 
-public class ThreadSavePools {
-    private static final ObjectMap<Class, ThreadSavePool> typePools = new ObjectMap<>();
+public class ThreadSafePools {
+    private static final ObjectMap<Class, ThreadSafePool> typePools = new ObjectMap<>();
     private static final Object poolCreateLock = new Object();
     private static final Object poolSetLock = new Object();
 
-    private ThreadSavePools() {
+    private ThreadSafePools() {
     }
 
     /**
      * Returns a new or existing pool for the specified type, stored in a Class to {@link Pool} map. Note that the max size is ignored for some reason.
      * if this is not the first time this pool has been requested.
      */
-    public static <T> ThreadSavePool<T> get(Class<T> type, Prov<T> supplier, int max) {
-        ThreadSavePool<T> pool = typePools.get(type);
+    public static <T> ThreadSafePool<T> get(Class<T> type, Prov<T> supplier, int max) {
+        ThreadSafePool<T> pool = typePools.get(type);
         if (pool == null) {
             synchronized (poolCreateLock) {
-                ThreadSavePool<T> otherPool = typePools.get(type);
+                ThreadSafePool<T> otherPool = typePools.get(type);
                 if (otherPool == null) {
-                    pool = new ThreadSavePoolImpl<>(4, max, supplier);
+                    pool = new ThreadSafePoolImpl<>(4, max, supplier);
                     typePools.put(type, pool);
                 } else {
                     pool = otherPool;
@@ -37,14 +37,14 @@ public class ThreadSavePools {
      * Returns a new or existing pool for the specified type, stored in a Class to {@link Pool} map. The max size of the pool used
      * is 5000.
      */
-    public static <T> ThreadSavePool<T> get(Class<T> type, Prov<T> supplier) {
+    public static <T> ThreadSafePool<T> get(Class<T> type, Prov<T> supplier) {
         return get(type, supplier, 5000);
     }
 
     /**
      * Sets an existing pool for the specified type, stored in a Class to {@link Pool} map.
      */
-    public static <T> void set(Class<T> type, ThreadSavePool<T> pool) {
+    public static <T> void set(Class<T> type, ThreadSafePool<T> pool) {
         synchronized (poolSetLock){
             typePools.put(type, pool);
         }

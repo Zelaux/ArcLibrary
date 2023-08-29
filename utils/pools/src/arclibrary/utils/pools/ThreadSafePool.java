@@ -3,16 +3,16 @@ package arclibrary.utils.pools;
 import arc.struct.Seq;
 import arc.util.pooling.Pool;
 
-public abstract class ThreadSavePool<T>  extends Pool<T> {
-    public ThreadSavePool() {
+public abstract class ThreadSafePool<T>  extends Pool<T> {
+    public ThreadSafePool() {
         super();
     }
 
-    public ThreadSavePool(int initialCapacity) {
+    public ThreadSafePool(int initialCapacity) {
         super(initialCapacity);
     }
 
-    public ThreadSavePool(int initialCapacity, int max) {
+    public ThreadSafePool(int initialCapacity, int max) {
         super(initialCapacity, max);
     }
 

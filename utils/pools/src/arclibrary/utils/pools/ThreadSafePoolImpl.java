@@ -1,21 +1,20 @@
 package arclibrary.utils.pools;
 
 import arc.func.Prov;
-import arc.util.pooling.Pool;
 
-public class ThreadSavePoolImpl<T> extends ThreadSavePool<T> {
+public class ThreadSafePoolImpl<T> extends ThreadSafePool<T> {
     public final Prov<T> provider;
 
-    public ThreadSavePoolImpl(Prov<T> provider) {
+    public ThreadSafePoolImpl(Prov<T> provider) {
         this.provider = provider;
     }
 
-    public ThreadSavePoolImpl(int initialCapacity, Prov<T> provider) {
+    public ThreadSafePoolImpl(int initialCapacity, Prov<T> provider) {
         super(initialCapacity);
         this.provider = provider;
     }
 
-    public ThreadSavePoolImpl(int initialCapacity, int max, Prov<T> provider) {
+    public ThreadSafePoolImpl(int initialCapacity, int max, Prov<T> provider) {
         super(initialCapacity, max);
         this.provider = provider;
     }
