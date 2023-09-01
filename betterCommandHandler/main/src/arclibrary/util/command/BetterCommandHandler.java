@@ -151,28 +151,34 @@ public class BetterCommandHandler extends CommandHandler {
 
 
     /**
-     * use ${@link BetterCommandHandler#aregister(String, String, Runnable)}
+     * use ${@link BetterCommandHandler#bregister(String, String, Runnable)}
      */
     @Override
     @Deprecated
     public Command register(String text, String description, Cons<String[]> runner) {
-        return aregister(text, description, () -> runner.get(EMPTY_STRING_ARRAY));
+        return bregister(text, description, () -> runner.get(EMPTY_STRING_ARRAY));
     }
 
     /**
-     * use ${@link BetterCommandHandler#aregister(String, String, String, BCommandRunner.ShortACommandRunner)}
+     * use ${@link BetterCommandHandler#bregister(String, String, String, BCommandRunner.ShortACommandRunner)}
      */
     @Override
     @Deprecated
     public Command register(String text, @Language("ExtendedArcCommandParams") String params, String description, Cons<String[]> runner) {
-        return aregister(text, params, description, (args) -> runner.get(args.getCopyRawStrings()));
+        return bregister(text, params, description, (args) -> runner.get(args.getCopyRawStrings()));
     }
 
-    public BCommand aregister(String text, String description, Runnable runner) {
+    /**
+     * full name betterRegister
+     */
+    public BCommand bregister(String text, String description, Runnable runner) {
         return register(text, description, (BCommandRunner<Object>) (a, b) -> runner.run());
     }
 
-    public BCommand aregister(String text, @Language("ExtendedArcCommandParams") String params, String description, BCommandRunner.ShortACommandRunner runner) {
+    /**
+     * full name betterRegister
+     */
+    public BCommand bregister(String text, @Language("ExtendedArcCommandParams") String params, String description, BCommandRunner.ShortACommandRunner runner) {
         return register(text, params, description, runner.full());
     }
 

@@ -17,13 +17,13 @@ public class SimpleHandlerTest extends AdvancedCommandHandlerPartTest {
         ObjectMap commands = Reflect.get(BetterCommandHandler.class, handler, "commands");
         commands.clear();
 
-        handler.aregister("empty", "", () -> {
+        handler.bregister("empty", "", () -> {
             output.append("empty");
         });
-        handler.aregister("optional", "[arg]", "", args -> {
+        handler.bregister("optional", "[arg]", "", args -> {
             output.append("optional ").append(args.hasParam(0) ? args.getRawString(0) : "\n");
         });
-        handler.aregister("required", "<arg>", "", args -> {
+        handler.bregister("required", "<arg>", "", args -> {
             output.append("required ").append(args.getRawString(0));
         });
         handler.setPrefix("");
