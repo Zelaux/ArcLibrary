@@ -11,6 +11,7 @@ include ":utils:files"
 include ":utils:pools"
 
 include "settings"
+include "betterCommandHandler"
 
 if(System.getenv("JITPACK") != "true"){
     include "test"
