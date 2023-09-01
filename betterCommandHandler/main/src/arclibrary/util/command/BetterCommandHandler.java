@@ -102,22 +102,32 @@ public class BetterCommandHandler extends CommandHandler {
         getCommandList().remove(c);
     }
 
+
+    /**
+     * use ${@link BetterCommandHandler#bregister(String, String, BCommandRunner)}
+     */
     @Override
+    @Deprecated
     public <T> Command register(String text, String description, CommandRunner<T> runner) {
-        return register(text, description, BCommandRunner.wrap(runner));
+        return bregister(text, description, BCommandRunner.wrap(runner));
     }
 
 
+
+    /**
+     * use ${@link BetterCommandHandler#bregister(String, String, String, BCommandRunner)}
+     */
     @Override
+    @Deprecated
     public <T> Command register(String text, @Language("ExtendedArcCommandParams") String params, String description, CommandRunner<T> runner) {
-        return register(text, params, description, BCommandRunner.wrap(runner));
+        return bregister(text, params, description, BCommandRunner.wrap(runner));
     }
 
     /**
      * Register a command which handles a zero-sized list of arguments and one parameter.
      */
-    public <T> BCommand register(String text, String description, BCommandRunner<T> runner) {
-        return register(text, "", description, runner);
+    public <T> BCommand bregister(String text, String description, BCommandRunner<T> runner) {
+        return bregister(text, "", description, runner);
     }
 
     /**
@@ -130,7 +140,7 @@ public class BetterCommandHandler extends CommandHandler {
      * There may only be one such argument, and it must be at the end. For example, the syntax
      * &lt;arg1&gt [arg2...] will require a first argument, and then take any text after that and put it in the second argument, optionally.
      */
-    public <T> BCommand register(String text, @Language("ExtendedArcCommandParams") String params, String description, BCommandRunner<T> runner) {
+    public <T> BCommand bregister(String text, @Language("ExtendedArcCommandParams") String params, String description, BCommandRunner<T> runner) {
         //remove previously registered commands
         getCommandList().<BCommand>as().remove(c -> {
             if (!c.text.equals(text)) {
@@ -172,14 +182,14 @@ public class BetterCommandHandler extends CommandHandler {
      * full name betterRegister
      */
     public BCommand bregister(String text, String description, Runnable runner) {
-        return register(text, description, (BCommandRunner<Object>) (a, b) -> runner.run());
+        return bregister(text, description, (BCommandRunner<Object>) (a, b) -> runner.run());
     }
 
     /**
      * full name betterRegister
      */
     public BCommand bregister(String text, @Language("ExtendedArcCommandParams") String params, String description, BCommandRunner.ShortACommandRunner runner) {
-        return register(text, params, description, runner.full());
+        return bregister(text, params, description, runner.full());
     }
 
 
