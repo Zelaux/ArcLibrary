@@ -48,7 +48,7 @@ public abstract class AdvancedCommandHandlerPartTest {
 
     protected BetterCommandHandler.BCommandResponse handleMessage(String text, BetterCommandHandler.BResponseType expectedType) {
         BetterCommandHandler.BCommandResponse response = handler.handleMessage(text);
-        Assert.assertEquals(expectedType, response.aType);
+        Assert.assertEquals(expectedType, response.myType);
         return response;
     }
 }

@@ -317,12 +317,12 @@ public class BetterCommandHandler extends CommandHandler {
     }
 
     public static class BCommandResponse extends CommandHandler.CommandResponse {
-        public final BResponseType aType;
+        public final BResponseType myType;
         public final String extra;
 
         public BCommandResponse(BResponseType type, BCommand command, String runCommand) {
             super(type.mirror, command, runCommand);
-            this.aType = type;
+            this.myType = type;
 //            this.command = command;
 //            this.runCommand = runCommand;
             extra = null;
@@ -330,7 +330,7 @@ public class BetterCommandHandler extends CommandHandler {
 
         public BCommandResponse(BResponseType type, BCommand command, String runCommand, String extra) {
             super(type.mirror, command, runCommand);
-            this.aType = type;
+            this.myType = type;
 //            this.command = command;
 //            this.runCommand = runCommand;
             this.extra = extra;
