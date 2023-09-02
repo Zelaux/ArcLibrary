@@ -1,5 +1,7 @@
 package arclibrary.util.command;
 
+import arclibrary.util.command.BetterCommandHandler.BCommandParam;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class ParserTest extends AdvancedCommandHandlerPartTest {
@@ -7,9 +9,13 @@ public class ParserTest extends AdvancedCommandHandlerPartTest {
         //noinspection unchecked
         checkError(message, new Class[]{CommandParamParseException.class}, runnable);
     }
-@Test
-    public void testUnexpectedChar() {
 
+    static <T> T[] arr(T... arr) {
+        return arr;
+    }
+
+    @Test
+    public void testUnexpectedChar() {
         checkError("Unexpected char 'd' at [11:12]\n" +
                 "[a] <b...> d[c] <d>\n" +
                 "           ^\n" +
@@ -35,5 +41,15 @@ public class ParserTest extends AdvancedCommandHandlerPartTest {
             //noinspection ParameterOrder,VariadicParamPosition
             CommandParamParser.parse("[a]<b...>[c]<d>");
         });
+    }
+
+    @Test
+    public void testParsingVariadic() {
+        Assert.assertArrayEquals(arr(new BCommandParam("it", true, true, null)), CommandParamParser.parse("[it...]").params);
+    }
+    @Test
+    public void testHandlers() {
+        Assert.assertArrayEquals(arr(new BCommandParam("it(some)", true, true, "some")), CommandParamParser.parse("[it(some)...]").params);
+        Assert.assertArrayEquals(arr(new BCommandParam("it(some)", true, true, "some")), CommandParamParser.parse("[it...(some)]").params);
     }
 }

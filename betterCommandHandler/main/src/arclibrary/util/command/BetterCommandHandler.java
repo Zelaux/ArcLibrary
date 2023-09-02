@@ -8,6 +8,8 @@ import arclibrary.util.command.ParamHandler.Result;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 
 /**
  * Parses command syntax.
@@ -77,7 +79,7 @@ public class BetterCommandHandler extends CommandHandler {
             }
             CommandArguments args = splitResponse.args;
             for (int i = 0; i < command.myParams.params.length; i++) {
-                CommandParam param = command.myParams.params[i];
+                BCommandParam param = command.myParams.params[i];
                 if (args.hasParam(i)) {
                     ParamHandler<?> handler = handlerObjectMap.getNull(param.handlerName);
                     if (handler == null) handler = ParamHandler.stringHandler;
@@ -282,7 +284,7 @@ public class BetterCommandHandler extends CommandHandler {
             }
             for (int i = 0; i < parsed.params.length; i++) {
                 if (i > 0) builder.append(' ');
-                CommandParam param = parsed.params[i];
+                BCommandParam param = parsed.params[i];
                 if (lastRequired > i) {
                     builder.append('[');
                     builder.append(param.name.replace(' ', '_'));
@@ -301,18 +303,41 @@ public class BetterCommandHandler extends CommandHandler {
         }
     }
 
-    public static class CommandParam {
+    public static class BCommandParam {
         public final String name;
         public final boolean optional;
         public final boolean variadic;
         @Nullable
         public final String handlerName;
 
-        public CommandParam(String name, boolean optional, boolean variadic, String handlerName) {
+        public BCommandParam(String name, boolean optional, boolean variadic, String handlerName) {
             this.name = name;
             this.optional = optional;
             this.variadic = variadic;
             this.handlerName = handlerName;
+        }
+
+        @Override
+        public String toString() {
+            return "BCommandParam{" +
+                    "name='" + name + '\'' +
+                    ", optional=" + optional +
+                    ", variadic=" + variadic +
+                    ", handlerName='" + handlerName + '\'' +
+                    '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            BCommandParam that = (BCommandParam) o;
+            return optional == that.optional && variadic == that.variadic && Objects.equals(name, that.name) && Objects.equals(handlerName, that.handlerName);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(name, optional, variadic, handlerName);
         }
     }
 

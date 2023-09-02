@@ -9,13 +9,13 @@ public class CommandParamParser {
     static final ThreadSafePool<TextRegion> textRegionPool = new ThreadSafePoolImpl<>(() -> new TextRegion() {
     });
     private static final byte ERROR_STATE = -1;
-    private static final byte SEARCH_PARAM = 0;
+    private static final byte searchParam = 0;
     private static final byte parsingRequired = 0b1;
     private static final byte parsingOptional = 0b10;
     private static final byte parsingHandler = 0b100;
     private static final ThreadLocal<CommandParamParserState> state = ThreadLocal.withInitial(CommandParamParserState::new);
 
-    public static int getParamAmount( @Language("ExtendedArcCommandParams") String text) {
+    public static int getParamAmount(@Language("ExtendedArcCommandParams") String text) {
         Seq<TextRegion> tmpRegions = state.get().tmpRegions;
         collectRegions(text, tmpRegions, true);
         int size = tmpRegions.size;
@@ -23,32 +23,49 @@ public class CommandParamParser {
         return size;
     }
 
-    public static CommandParams parse( @Language("ExtendedArcCommandParams") String text) throws CommandParamParseException {
+    public static CommandParams parse(@Language("ExtendedArcCommandParams") String text) throws CommandParamParseException {
         final Seq<TextRegion> tmpRegions = state.get().tmpRegions;
         collectRegions(text, tmpRegions, true);
-        BetterCommandHandler.CommandParam[] params = new BetterCommandHandler.CommandParam[tmpRegions.size];
+        BetterCommandHandler.BCommandParam[] params = new BetterCommandHandler.BCommandParam[tmpRegions.size];
         boolean wasVariadic = false;
         for (int i = 0; i < tmpRegions.size; i++) {
             TextRegion region = tmpRegions.get(i);
             boolean isVariadic = false;
             int nameOffset = 0;
             if (region.length() > 5) {
-                for (int j = 0; ; j++) {
-                    if (text.charAt(region.end - i - 1) != '.') break;
-                    if (j == 2) {
-                        if (wasVariadic) {
-                            throwException("Cannot be more than one variadic parameter!", region, text);
+                int lastChar = region.end - 1;
+                if (region.isEndsByHandler()) {
+                    lastChar = region.handlerStart - 1;
+                    if (region.handlerStart - region.start < 5/*open char+one symbol+'...'*/) {
+                        lastChar = -1;
+                    }
+                }
+                if (lastChar > 0) {
+                    for (int j = 0; ; j++) {
+                        if (text.charAt(lastChar - 1 - i) != '.') break;
+                        if (j == 2) {
+                            if (wasVariadic) {
+                                throwException("Cannot be more than one variadic parameter!", region, text);
+                            }
+                            isVariadic = wasVariadic = true;
+                            nameOffset = 3;
+                            break;
                         }
-                        isVariadic = wasVariadic = true;
-                        nameOffset = 3;
-                        break;
                     }
                 }
             }
-            params[i] = new BetterCommandHandler.CommandParam(
-                    text.substring(region.start + 1, region.end - 1 - nameOffset),
-                    text.charAt(region.start) == '[',
-                    isVariadic, region.hasHandler() ? region.substringHandler(text) : null);
+            boolean isOptional = text.charAt(region.start) == '[';
+            if (region.isEndsByHandler() && isVariadic) {
+                params[i] = new BetterCommandHandler.BCommandParam(
+                        text.substring(region.start + 1, region.handlerStart - 1 - nameOffset)+"(" + region.substringHandler(text)+")",
+                        isOptional,
+                        true, region.hasHandler() ? region.substringHandler(text) : null);
+            } else {
+                params[i] = new BetterCommandHandler.BCommandParam(
+                        text.substring(region.start + 1, region.end - 1 - nameOffset),
+                        isOptional,
+                        isVariadic, region.hasHandler() ? region.substringHandler(text) : null);
+            }
         }
         clear(tmpRegions);
         return new CommandParams(params);
@@ -56,7 +73,7 @@ public class CommandParamParser {
 
     private static int collectRegions(String text, final Seq<TextRegion> tmpRegions, boolean canThrow) {
         clear(tmpRegions);
-        byte state = SEARCH_PARAM;
+        byte state = searchParam;
         int begin = -1;
         int handlerBegin = -1, handleEnd = -1;
         for (int i = 0; i < text.length(); i++) {
@@ -69,7 +86,7 @@ public class CommandParamParser {
                 continue;
             }
             switch (state & 0b11) {
-                case SEARCH_PARAM:
+                case searchParam:
                     if (c != ' ' && c != '<' && c != '[')
                         if (canThrow) {
                             throwException("Unexpected char '" + c + "'", i, i + 1, text);
@@ -120,7 +137,7 @@ public class CommandParamParser {
         }
 
         tmpRegions.add(textRegion(begin, end, handlerBegin == -1 ? -1 : handlerBegin + 1, handleEnd));
-        return SEARCH_PARAM;
+        return searchParam;
     }
 
     private static TextRegion textRegion(int begin, int end, int handlerBegin, int handleEnd) {
@@ -167,6 +184,10 @@ public class CommandParamParser {
 
         public String substringHandler(String text) {
             return text.substring(handlerStart, handlerEnd);
+        }
+
+        public boolean isEndsByHandler() {
+            return end - 2 == handlerEnd;
         }
     }
 }
