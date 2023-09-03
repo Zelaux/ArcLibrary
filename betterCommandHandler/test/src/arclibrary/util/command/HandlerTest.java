@@ -10,8 +10,10 @@ public class HandlerTest extends AdvancedCommandHandlerPartTest {
     public void testInt() {
         handler.registerHandler("digit", DefaultCommandHandlers.intHandler);
         handler.bregister("test1", "<digit(digit)>", "", (args) -> {
-            Assert.assertEquals(Integer.class, args.getParam(0).getClass());
-            int param = args.getParam(0);
+
+            Assert.assertEquals(Integer.class, args.get(0).getClass());
+
+            int param = args.get(0);
             Assert.assertEquals(123, param);
         });
         handleMessage("test1 123", BetterCommandHandler.BResponseType.valid);
@@ -22,8 +24,10 @@ public class HandlerTest extends AdvancedCommandHandlerPartTest {
     public void testFloat() {
         handler.registerHandler("float", DefaultCommandHandlers.floatHandler);
         handler.bregister("test2", "<float(float)>", "", (args) -> {
-            Assert.assertEquals(Float.class, args.getParam(0).getClass());
-            float param = args.getParam(0);
+
+            Assert.assertEquals(Float.class, args.get(0).getClass());
+
+            float param = args.get(0);
             Assert.assertEquals(12.3f, param, Mathf.FLOAT_ROUNDING_ERROR);
         });
         handleMessage("test2 12.3", BetterCommandHandler.BResponseType.valid);
@@ -39,8 +43,10 @@ public class HandlerTest extends AdvancedCommandHandlerPartTest {
         int[] testIdx = {0};
         handler.bregister("test3", "<flag(bool)>", "", (args) -> {
             boolean testvalue = tests[testIdx[0]++];
-            Assert.assertEquals(Boolean.class, args.getParam(0).getClass());
-            boolean param = args.getParam(0);
+
+            Assert.assertEquals(Boolean.class, args.get(0).getClass());
+
+            boolean param = args.get(0);
             Assert.assertEquals(testvalue, param);
         });
         handleMessage("test3 true", BetterCommandHandler.BResponseType.valid);

@@ -80,7 +80,7 @@ public class BetterCommandHandler extends CommandHandler {
             CommandArguments args = splitResponse.args;
             for (int i = 0; i < command.myParams.params.length; i++) {
                 BCommandParam param = command.myParams.params[i];
-                if (args.hasParam(i)) {
+                if (args.has(i)) {
                     ParamHandler<?> handler = handlerObjectMap.getNull(param.handlerName);
                     if (handler == null) handler = ParamHandler.stringHandler;
                     Result<?> handle = handler.handle(command, args, i);

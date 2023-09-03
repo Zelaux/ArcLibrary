@@ -21,7 +21,7 @@ public class SimpleHandlerTest extends AdvancedCommandHandlerPartTest {
             output.append("empty");
         });
         handler.bregister("optional", "[arg]", "", args -> {
-            output.append("optional ").append(args.hasParam(0) ? args.getRawString(0) : "\n");
+            output.append("optional ").append(args.getRawStringOrDefault(0, "\n"));
         });
         handler.bregister("required", "<arg>", "", args -> {
             output.append("required ").append(args.getRawString(0));
