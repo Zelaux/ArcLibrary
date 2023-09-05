@@ -2,6 +2,8 @@ package arclibrary.util.command;
 
 
 import arc.func.Prov;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class CommandArguments {
@@ -39,6 +41,7 @@ public class CommandArguments {
      *                   ^^^^  ^^^^
      *                   idx0  idx1
      */
+    @Contract(value = "_,!null->!null;_,null->_")
     public String getRawStringOrDefault(int paramIndex, String def) {
         if (!has(paramIndex)) return def;
         return getRawString(paramIndex);
@@ -95,12 +98,13 @@ public class CommandArguments {
         return getOrDefault(paramIndex, null);
     }
 
-    public <T> T getOrDefault(int paramIndex, T def) {
+    @Contract(value = "_,!null->!null;_,null->_")
+    public <T> T getOrDefault(int paramIndex, @Nullable T def) {
         if (!has(paramIndex)) return def;
         return get(paramIndex);
     }
 
-    public <T> T getOrCraeteDefault(int paramIndex, Prov<T> def) {
+    public <T> T getOrCraeteDefault(int paramIndex, @NotNull Prov<T> def) {
         if (!has(paramIndex)) return def.get();
         return get(paramIndex);
     }

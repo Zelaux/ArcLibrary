@@ -12,6 +12,14 @@ public class StringAssert {
             Assert.fail(format(null, (Object) expected, (Object) actual));
         }
     }
+    public static void assertContains(String expected, String actual) {
+        if (actual != null && actual.contains(expected)) {
+        } else if (expected != null && actual != null) {
+            throw new ComparisonFailure("", expected, actual);
+        } else {
+            Assert.fail(format(null, (Object) expected, (Object) actual));
+        }
+    }
     static String format(String message, Object expected, Object actual) {
         String formatted = "";
         if (message != null && !message.equals("")) {

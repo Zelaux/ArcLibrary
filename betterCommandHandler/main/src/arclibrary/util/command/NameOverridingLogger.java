@@ -3,12 +3,12 @@ package arclibrary.util.command;
 import arc.func.Cons;
 
 public interface NameOverridingLogger {
-    void log(BetterCommandHandler.BCommand overriddenCommand);
+    void log(BetterCommandHandler.BCommand overriddenCommand, String stackTrace);
 
     final class Empty implements NameOverridingLogger {
 
         @Override
-        public void log(BetterCommandHandler.BCommand overriddenCommand) {
+        public void log(BetterCommandHandler.BCommand overriddenCommand, String stackTrace) {
 
         }
     }
@@ -21,8 +21,8 @@ public interface NameOverridingLogger {
         }
 
         @Override
-        public void log(BetterCommandHandler.BCommand overriddenCommand) {
-            stringLogger.get("Overriding command '" + overriddenCommand.descriptor() + "' Creation stacktrace: \n" + overriddenCommand.creationStackStace);
+        public void log(BetterCommandHandler.BCommand overriddenCommand, String stackTrace) {
+            stringLogger.get(CommandOverridingNotAllowed.createMessage(overriddenCommand, stackTrace));
         }
     }
 }

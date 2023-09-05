@@ -1,6 +1,7 @@
 package arclibrary.util.command;
 
 
+import arc.func.Boolf;
 import arc.func.Cons;
 import arc.struct.ObjectMap;
 import arc.util.*;
@@ -143,14 +144,16 @@ public class BetterCommandHandler extends CommandHandler {
      * &lt;arg1&gt [arg2...] will require a first argument, and then take any text after that and put it in the second argument, optionally.
      */
     public <T> BCommand bregister(String text, @Language("ExtendedArcCommandParams") String params, String description, BCommandRunner<T> runner) {
+        //noinspection ThrowableNotThrown
+        String stackTrace = StackTrace.create().getStringStackTrace(stackElementSkipper());
         //remove previously registered commands
         getCommandList().<BCommand>as().remove(c -> {
             if (!c.text.equals(text)) {
                 return false;
             }
-            if (!allowNameOverriding) throw new CommandOverridingNotAllowed(c);
+            if (!allowNameOverriding) throw new CommandOverridingNotAllowed(c, stackTrace);
             if (nameOverridingLogger != null) {
-                nameOverridingLogger.log(c);
+                nameOverridingLogger.log(c,stackTrace);
             }
             return true;
         });
@@ -159,6 +162,14 @@ public class BetterCommandHandler extends CommandHandler {
         commands.put(text.toLowerCase(), cmd);
         getCommandList().add(cmd);
         return cmd;
+    }
+
+    @NotNull
+    private static Boolf<StackTraceElement> stackElementSkipper() {
+        return it -> {
+            String className = it.getClassName();
+            return className.startsWith(BetterCommandHandler.class.getCanonicalName());
+        };
     }
 
 
@@ -264,10 +275,7 @@ public class BetterCommandHandler extends CommandHandler {
             this.myParamText = paramText;
             this.myRunner = runner;
 
-            creationStackStace = StackTraceException.getStringStackTrace(it -> {
-                String className = it.getClassName();
-                return className.startsWith(BetterCommandHandler.class.getCanonicalName());
-            });
+            creationStackStace = CreationStackTrace.create().getStringStackTrace(stackElementSkipper());
             myParams = CommandParamParser.parse(paramText);
         }
 
