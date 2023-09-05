@@ -75,11 +75,11 @@ public class BetterCommandHandler extends CommandHandler {
         BCommand command = commands.get(commandstr);
 
         if (command != null) {
-            ParamSplitter.SplitResponse splitResponse;
+            ArgumentSplitter.SplitResponse splitResponse;
             if (spaceIndex == -1) {
-                splitResponse = ParamSplitter.split("", 0, 0, command.paramsPattern);
+                splitResponse = ArgumentSplitter.split("", 0, 0, command.paramsPattern);
             } else {
-                splitResponse = ParamSplitter.split(message, spaceIndex + 1, message.length(), command.paramsPattern);
+                splitResponse = ArgumentSplitter.split(message, spaceIndex + 1, message.length(), command.paramsPattern);
             }
             if (splitResponse.many) {
                 return new BCommandResponse(BResponseType.manyArguments, command, commandstr);

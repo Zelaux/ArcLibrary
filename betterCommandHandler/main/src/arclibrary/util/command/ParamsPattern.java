@@ -7,7 +7,7 @@ public class ParamsPattern {
     public final BetterCommandHandler.BCommandParam[] params;
     public final int variadicIndex;
     public final int requiredAmount;
-    public Bits separators = new Bits();
+    public Bits separators = new Bits(256);
 
     public ParamsPattern(BetterCommandHandler.BCommandParam[] params) {
         this.params = params;

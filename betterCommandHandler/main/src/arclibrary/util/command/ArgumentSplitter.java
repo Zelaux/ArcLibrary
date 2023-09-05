@@ -1,12 +1,11 @@
 package arclibrary.util.command;
 
 import arc.struct.IntSeq;
-import arc.util.Structs;
 
 import java.util.Arrays;
 import java.util.Objects;
 
-public class ParamSplitter {
+public class ArgumentSplitter {
     private static final ThreadLocal<SplitResponse> response = ThreadLocal.withInitial(SplitResponse::new);
     private static final Arguments emptyArguments = new Arguments(new String[0], new short[0]);
     private static final ThreadLocal<IntSeq> tmpSeq = ThreadLocal.withInitial(IntSeq::new);
@@ -22,7 +21,7 @@ public class ParamSplitter {
         }
         Objects.requireNonNull(text, "text cannot be null");
         int spaces = 0;
-        IntSeq tmpSeq = ParamSplitter.tmpSeq.get();
+        IntSeq tmpSeq = ArgumentSplitter.tmpSeq.get();
         tmpSeq.clear();
         tmpSeq.add(startIndex - 1);
         for (int i = startIndex; i < endIndex; i++) {
