@@ -77,9 +77,9 @@ public class BetterCommandHandler extends CommandHandler {
         if (command != null) {
             ArgumentSplitter.SplitResponse splitResponse;
             if (spaceIndex == -1) {
-                splitResponse = ArgumentSplitter.split("", 0, 0, command.paramsPattern);
+                splitResponse = ArgumentSplitter.split("", 0, 0, command.paramPattern);
             } else {
-                splitResponse = ArgumentSplitter.split(message, spaceIndex + 1, message.length(), command.paramsPattern);
+                splitResponse = ArgumentSplitter.split(message, spaceIndex + 1, message.length(), command.paramPattern);
             }
             if (splitResponse.many) {
                 return new BCommandResponse(BResponseType.manyArguments, command, commandstr);
@@ -89,8 +89,8 @@ public class BetterCommandHandler extends CommandHandler {
             Arguments args = splitResponse.args;
             try {
                 args.setCommand(command, prefix + commandstr);
-                for (int i = 0; i < command.paramsPattern.params.length; i++) {
-                    BCommandParam param = command.paramsPattern.params[i];
+                for (int i = 0; i < command.paramPattern.params.length; i++) {
+                    BCommandParam param = command.paramPattern.params[i];
                     if (args.has(i)) {
                         ParamHandler<?> handler = handlerObjectMap.getNull(param.handlerName);
                         if (handler == null) handler = ParamHandler.stringHandler;
@@ -262,7 +262,7 @@ public class BetterCommandHandler extends CommandHandler {
     public static class BCommand extends CommandHandler.Command {
 
         public final String myParamText;
-        public final ParamsPattern paramsPattern;
+        public final ParamPattern paramPattern;
         public final String creationStackStace;
         @SuppressWarnings("rawtypes")
         final BCommandRunner myRunner;
@@ -282,12 +282,12 @@ public class BetterCommandHandler extends CommandHandler {
             this.myRunner = runner;
 
             creationStackStace = CreationStackTrace.create().getStringStackTrace(stackElementSkipper());
-            paramsPattern = CommandParamParser.parse(paramText);
+            paramPattern = ParamPatternParser.parse(paramText);
         }
 
         @NotNull
         private static String mockParams(@Language("ExtendedArcCommandParams") String paramText) {
-            ParamsPattern parsed = CommandParamParser.parse(paramText);
+            ParamPattern parsed = ParamPatternParser.parse(paramText);
             StringBuilder builder = new StringBuilder();
             int lastRequired = -1;
             for (int i = parsed.params.length - 1; i >= 0; i--) {
@@ -317,7 +317,7 @@ public class BetterCommandHandler extends CommandHandler {
         }
 
         public BCommand separators(char... separators) {
-            paramsPattern.separators(separators);
+            paramPattern.separators(separators);
             return this;
         }
     }

@@ -1,11 +1,11 @@
 package arclibrary.util.command;
 
-public class CommandParamParseException extends RuntimeException {
+public class ParamPatternParseException extends RuntimeException {
     public final int startIndex;
     public final int endIndex;
     public final String rawText;
 
-    public CommandParamParseException(String message, int startIndex, int endIndex, String rawText) {
+    public ParamPatternParseException(String message, int startIndex, int endIndex, String rawText) {
         super(calculateMessage(message, rawText, startIndex, endIndex));
         this.startIndex = startIndex;
         this.endIndex = endIndex;

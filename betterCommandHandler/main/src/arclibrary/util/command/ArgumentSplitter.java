@@ -10,11 +10,11 @@ public class ArgumentSplitter {
     private static final Arguments emptyArguments = new Arguments(new String[0], new short[0]);
     private static final ThreadLocal<IntSeq> tmpSeq = ThreadLocal.withInitial(IntSeq::new);
 
-    public static SplitResponse split(String text, ParamsPattern pattern) {
+    public static SplitResponse split(String text, ParamPattern pattern) {
         return split(text, 0, text.length(), pattern);
     }
 
-    public static SplitResponse split(String text, int startIndex, int endIndex, ParamsPattern pattern) {
+    public static SplitResponse split(String text, int startIndex, int endIndex, ParamPattern pattern) {
         Objects.requireNonNull(pattern, "pattern cannot be null");
         if (endIndex - startIndex == 0) {
             return pattern.requiredAmount == 0 ? response().args(emptyArguments) : response().few();
@@ -68,7 +68,7 @@ public class ArgumentSplitter {
         return response.get();
     }
 
-    private static short[] mapperForPattern(ParamsPattern pattern) {
+    private static short[] mapperForPattern(ParamPattern pattern) {
         short[] mapper = new short[pattern.params.length];
         Arrays.fill(mapper, (short) -1);
         return mapper;

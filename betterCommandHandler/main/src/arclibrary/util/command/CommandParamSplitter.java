@@ -1,6 +1,6 @@
 package arclibrary.util.command;
 /**
- * use {@link ArgumentSplitter} instead
+ * @see arclibrary.util.command.ArgumentSplitter
  * */
 @Deprecated
 public class CommandParamSplitter extends ArgumentSplitter {

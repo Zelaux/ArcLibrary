@@ -3,13 +3,13 @@ package arclibrary.util.command;
 import arc.struct.Bits;
 import arc.util.Structs;
 
-public class ParamsPattern {
+public class ParamPattern {
     public final BetterCommandHandler.BCommandParam[] params;
     public final int variadicIndex;
     public final int requiredAmount;
     public Bits separators = new Bits(256);
 
-    public ParamsPattern(BetterCommandHandler.BCommandParam[] params) {
+    public ParamPattern(BetterCommandHandler.BCommandParam[] params) {
         this.params = params;
         variadicIndex = Structs.indexOf(params, it -> it.variadic);
         requiredAmount = Structs.count(params, it -> !it.optional);
@@ -18,7 +18,7 @@ public class ParamsPattern {
 
     }
 
-    public ParamsPattern separators(char... separators) {
+    public ParamPattern separators(char... separators) {
         this.separators.clear();
         for (char separator : separators) {
             this.separators.set(separator);
