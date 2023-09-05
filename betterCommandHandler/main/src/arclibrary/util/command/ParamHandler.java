@@ -3,7 +3,7 @@ package arclibrary.util.command;
 public interface ParamHandler<T>{
     ParamHandler<String> stringHandler = (c, args, i) -> Result.success(args.getRawString(i));
 
-    Result<T> handle(BetterCommandHandler.BCommand command, CommandArguments arguments, int index);
+    Result<T> handle(BetterCommandHandler.BCommand command, Arguments arguments, int index);
 
     final class Result<T>{
         public final T value;

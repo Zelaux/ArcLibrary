@@ -18,7 +18,6 @@ import java.util.Objects;
  */
 @SuppressWarnings("UnknownLanguage")
 public class BetterCommandHandler extends CommandHandler {
-
     protected static final String[] EMPTY_STRING_ARRAY = new String[0];
     public static NameOverridingLogger defaultNameOverridingLogger = new NameOverridingLogger.Impl(Log::err);
     public static boolean defaultAllowNameOverriding = true;
@@ -26,6 +25,7 @@ public class BetterCommandHandler extends CommandHandler {
     private final ObjectMap<String, BCommand> commands;
     public NameOverridingLogger nameOverridingLogger = defaultNameOverridingLogger;
     public boolean allowNameOverriding = defaultAllowNameOverriding;
+    protected char[] defaultSeparators = {' '};
 
     /**
      * Creates a command handler with a specific command prefix.
@@ -40,6 +40,14 @@ public class BetterCommandHandler extends CommandHandler {
      */
     public BetterCommandHandler() {
         this("");
+    }
+
+    @NotNull
+    private static Boolf<StackTraceElement> stackElementSkipper() {
+        return it -> {
+            String className = it.getClassName();
+            return className.startsWith(BetterCommandHandler.class.getCanonicalName());
+        };
     }
 
     public void registerHandler(String name, ParamHandler<?> handler) {
@@ -67,31 +75,36 @@ public class BetterCommandHandler extends CommandHandler {
         BCommand command = commands.get(commandstr);
 
         if (command != null) {
-            CommandParamSplitter.SplitResponse splitResponse;
+            ParamSplitter.SplitResponse splitResponse;
             if (spaceIndex == -1) {
-                splitResponse = CommandParamSplitter.split("", 0, 0, command.myParams);
+                splitResponse = ParamSplitter.split("", 0, 0, command.paramsPattern);
             } else {
-                splitResponse = CommandParamSplitter.split(message, spaceIndex + 1, message.length(), command.myParams);
+                splitResponse = ParamSplitter.split(message, spaceIndex + 1, message.length(), command.paramsPattern);
             }
             if (splitResponse.many) {
                 return new BCommandResponse(BResponseType.manyArguments, command, commandstr);
             } else if (splitResponse.few) {
                 return new BCommandResponse(BResponseType.fewArguments, command, commandstr);
             }
-            CommandArguments args = splitResponse.args;
-            for (int i = 0; i < command.myParams.params.length; i++) {
-                BCommandParam param = command.myParams.params[i];
-                if (args.has(i)) {
-                    ParamHandler<?> handler = handlerObjectMap.getNull(param.handlerName);
-                    if (handler == null) handler = ParamHandler.stringHandler;
-                    Result<?> handle = handler.handle(command, args, i);
-                    if (handle.isError()) {
-                        return new BCommandResponse(BResponseType.nonValidParam, command, commandstr, handle.error);
+            Arguments args = splitResponse.args;
+            try {
+                args.setCommand(command, prefix + commandstr);
+                for (int i = 0; i < command.paramsPattern.params.length; i++) {
+                    BCommandParam param = command.paramsPattern.params[i];
+                    if (args.has(i)) {
+                        ParamHandler<?> handler = handlerObjectMap.getNull(param.handlerName);
+                        if (handler == null) handler = ParamHandler.stringHandler;
+                        Result<?> handle = handler.handle(command, args, i);
+                        if (handle.isError()) {
+                            return new BCommandResponse(BResponseType.nonValidParam, command, commandstr, handle.error);
+                        }
+                        args.setHandledObject(i, handle.value);
                     }
-                    args.setHandledObject(i, handle.value);
                 }
+                command.myRunner.accept(args, params);
+            } finally {
+                args.reset();
             }
-            command.myRunner.accept(args, params);
             return new BCommandResponse(BResponseType.valid, command, commandstr);
         } else {
             return new BCommandResponse(BResponseType.unknownCommand, null, commandstr);
@@ -105,7 +118,6 @@ public class BetterCommandHandler extends CommandHandler {
         getCommandList().remove(c);
     }
 
-
     /**
      * use ${@link BetterCommandHandler#bregister(String, String, BCommandRunner)}
      */
@@ -114,8 +126,6 @@ public class BetterCommandHandler extends CommandHandler {
     public <T> Command register(String text, String description, CommandRunner<T> runner) {
         return bregister(text, description, BCommandRunner.wrap(runner));
     }
-
-
 
     /**
      * use ${@link BetterCommandHandler#bregister(String, String, String, BCommandRunner)}
@@ -153,25 +163,21 @@ public class BetterCommandHandler extends CommandHandler {
             }
             if (!allowNameOverriding) throw new CommandOverridingNotAllowed(c, stackTrace);
             if (nameOverridingLogger != null) {
-                nameOverridingLogger.log(c,stackTrace);
+                nameOverridingLogger.log(c, stackTrace);
             }
             return true;
         });
 
-        BCommand cmd = new BCommand(text, params, description, runner);
+        BCommand cmd = new BCommand(text, params, description, runner).separators(defaultSeparators);
         commands.put(text.toLowerCase(), cmd);
         getCommandList().add(cmd);
         return cmd;
     }
 
-    @NotNull
-    private static Boolf<StackTraceElement> stackElementSkipper() {
-        return it -> {
-            String className = it.getClassName();
-            return className.startsWith(BetterCommandHandler.class.getCanonicalName());
-        };
+    public BetterCommandHandler defaultSeparators(char... defaultSeparators) {
+        this.defaultSeparators = defaultSeparators;
+        return this;
     }
-
 
     /**
      * use ${@link BetterCommandHandler#bregister(String, String, Runnable)}
@@ -216,10 +222,10 @@ public class BetterCommandHandler extends CommandHandler {
             return new WrappedRunner<>(runner);
         }
 
-        void accept(CommandArguments args, T parameter);
+        void accept(Arguments args, T parameter);
 
         interface ShortACommandRunner {
-            void accept(CommandArguments args);
+            void accept(Arguments args);
 
             default BCommandRunner<Object> full() {
                 return new TransformedRunner(this);
@@ -234,7 +240,7 @@ public class BetterCommandHandler extends CommandHandler {
             }
 
             @Override
-            public void accept(CommandArguments args, Object parameter) {
+            public void accept(Arguments args, Object parameter) {
                 runner.accept(args);
             }
         }
@@ -247,7 +253,7 @@ public class BetterCommandHandler extends CommandHandler {
             }
 
             @Override
-            public void accept(CommandArguments args, T parameter) {
+            public void accept(Arguments args, T parameter) {
                 runner.accept(args.getCopyRawStrings(), parameter);
             }
         }
@@ -256,7 +262,7 @@ public class BetterCommandHandler extends CommandHandler {
     public static class BCommand extends CommandHandler.Command {
 
         public final String myParamText;
-        public final CommandParams myParams;
+        public final ParamsPattern paramsPattern;
         public final String creationStackStace;
         @SuppressWarnings("rawtypes")
         final BCommandRunner myRunner;
@@ -276,12 +282,12 @@ public class BetterCommandHandler extends CommandHandler {
             this.myRunner = runner;
 
             creationStackStace = CreationStackTrace.create().getStringStackTrace(stackElementSkipper());
-            myParams = CommandParamParser.parse(paramText);
+            paramsPattern = CommandParamParser.parse(paramText);
         }
 
         @NotNull
         private static String mockParams(@Language("ExtendedArcCommandParams") String paramText) {
-            CommandParams parsed = CommandParamParser.parse(paramText);
+            ParamsPattern parsed = CommandParamParser.parse(paramText);
             StringBuilder builder = new StringBuilder();
             int lastRequired = -1;
             for (int i = parsed.params.length - 1; i >= 0; i--) {
@@ -293,7 +299,7 @@ public class BetterCommandHandler extends CommandHandler {
             for (int i = 0; i < parsed.params.length; i++) {
                 if (i > 0) builder.append(' ');
                 BCommandParam param = parsed.params[i];
-                if (lastRequired > i) {
+                if (i > lastRequired) {
                     builder.append('[');
                     builder.append(param.name.replace(' ', '_'));
                     builder.append(']');
@@ -308,6 +314,11 @@ public class BetterCommandHandler extends CommandHandler {
 
         public String descriptor() {
             return text + " " + myParamText;
+        }
+
+        public BCommand separators(char... separators) {
+            paramsPattern.separators(separators);
+            return this;
         }
     }
 

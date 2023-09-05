@@ -6,15 +6,31 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CommandArguments {
+public class Arguments {
     private final String[] rawStrings;
     private final Object[] handledObjects;
     private final short[] indexMapper;
+    private BetterCommandHandler.BCommand myCommand;
+    private String commandWithPrefix;
 
-    public CommandArguments(String[] rawStrings, short[] indexMapper) {
+    public Arguments(String[] rawStrings, short[] indexMapper) {
         this.rawStrings = rawStrings;
         this.indexMapper = indexMapper;
         handledObjects = new Object[rawStrings.length];
+    }
+
+    public Arguments setCommand(BetterCommandHandler.BCommand myCommand, String commandWithPrefix) {
+        this.myCommand = myCommand;
+        this.commandWithPrefix = commandWithPrefix;
+        return this;
+    }
+
+    public BetterCommandHandler.BCommand command() {
+        return myCommand;
+    }
+
+    public String commandWithPrefix() {
+        return commandWithPrefix;
     }
 
     public String[] getCopyRawStrings() {
@@ -52,7 +68,7 @@ public class CommandArguments {
     }
 
     /**
-     * @deprecated use {@link CommandArguments#has(int)}
+     * @deprecated use {@link Arguments#has(int)}
      */
     @Deprecated
     public boolean hasParam(int i) {
@@ -73,7 +89,7 @@ public class CommandArguments {
 
 
     /**
-     * @deprecated use {@link CommandArguments#get(int)}
+     * @deprecated use {@link Arguments#get(int)}
      */
     @Deprecated
     public <T> T getParam(int index) {
@@ -107,5 +123,10 @@ public class CommandArguments {
     public <T> T getOrCraeteDefault(int paramIndex, @NotNull Prov<T> def) {
         if (!has(paramIndex)) return def.get();
         return get(paramIndex);
+    }
+
+    public void reset() {
+        myCommand = null;
+        commandWithPrefix = null;
     }
 }

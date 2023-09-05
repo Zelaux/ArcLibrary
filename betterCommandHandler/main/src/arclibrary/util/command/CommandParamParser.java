@@ -8,7 +8,7 @@ import org.intellij.lang.annotations.Language;
 public class CommandParamParser {
     static final ThreadSafePool<TextRegion> textRegionPool = new ThreadSafePoolImpl<>(() -> new TextRegion() {
     });
-    private static final byte ERROR_STATE = -1;
+    private static final byte errorState = -1;
     private static final byte searchParam = 0;
     private static final byte parsingRequired = 0b1;
     private static final byte parsingOptional = 0b10;
@@ -23,7 +23,7 @@ public class CommandParamParser {
         return size;
     }
 
-    public static CommandParams parse(@Language("ExtendedArcCommandParams") String text) throws CommandParamParseException {
+    public static ParamsPattern parse(@Language("ExtendedArcCommandParams") String text) throws CommandParamParseException {
         final Seq<TextRegion> tmpRegions = state.get().tmpRegions;
         collectRegions(text, tmpRegions, true);
         BetterCommandHandler.BCommandParam[] params = new BetterCommandHandler.BCommandParam[tmpRegions.size];
@@ -68,7 +68,7 @@ public class CommandParamParser {
             }
         }
         clear(tmpRegions);
-        return new CommandParams(params);
+        return new ParamsPattern(params);
     }
 
     private static int collectRegions(String text, final Seq<TextRegion> tmpRegions, boolean canThrow) {
@@ -103,7 +103,7 @@ public class CommandParamParser {
                 case parsingOptional:
                     if (c == '>' && (state & parsingRequired) != 0 || c == ']' && (state & parsingOptional) != 0) {
                         state = completeParam(text, tmpRegions, begin, i + 1, handlerBegin, handleEnd, canThrow);
-                        if (state == ERROR_STATE) {
+                        if (state == errorState) {
                             clear(tmpRegions);
                             return -1;
                         }
@@ -132,7 +132,7 @@ public class CommandParamParser {
                         begin, end, text
                 );
             } else {
-                return ERROR_STATE;
+                return errorState;
             }
         }
 

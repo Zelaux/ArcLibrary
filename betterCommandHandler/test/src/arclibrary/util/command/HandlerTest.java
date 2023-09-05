@@ -24,9 +24,7 @@ public class HandlerTest extends AdvancedCommandHandlerPartTest {
     public void testFloat() {
         handler.registerHandler("float", DefaultCommandHandlers.floatHandler);
         handler.bregister("test2", "<float(float)>", "", (args) -> {
-
             Assert.assertEquals(Float.class, args.get(0).getClass());
-
             float param = args.get(0);
             Assert.assertEquals(12.3f, param, Mathf.FLOAT_ROUNDING_ERROR);
         });
