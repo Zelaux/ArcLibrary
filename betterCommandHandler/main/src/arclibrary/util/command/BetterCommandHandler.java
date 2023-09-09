@@ -151,7 +151,7 @@ public class BetterCommandHandler extends CommandHandler {
      * All mandatory arguments must come before optional arguments. Arg names must not have spaces in them. <br>
      * You may also use the ... syntax after the arg name to designate that everything after it will not be split into extra arguments.
      * There may only be one such argument, and it must be at the end. For example, the syntax
-     * &lt;arg1&gt [arg2...] will require a first argument, and then take any text after that and put it in the second argument, optionally.
+     * &lt;arg1 [arg2...] will require a first argument, and then take any text after that and put it in the second argument, optionally.
      */
     public <T> BCommand bregister(String text, @Language("ExtendedArcCommandParams") String params, String description, BCommandRunner<T> runner) {
         //noinspection ThrowableNotThrown
