@@ -9,6 +9,7 @@ include ":graphics:draw3d"
 
 include ":utils:files"
 include ":utils:pools"
+include ":utils:entries"
 
 include "settings"
 include "betterCommandHandler"
