@@ -2,7 +2,7 @@ package arclibrary.utils.entries;
 
 
 import arc.struct.*;
-
+@SuppressWarnings("unused")
 public class Entries {
     //region creation
     public static IntFloatMap.Entry intFloatEntry(int key, float value) {
