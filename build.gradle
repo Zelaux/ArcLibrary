@@ -80,7 +80,6 @@ configure(projects) {
             maven(MavenPublication) {
                 from components.java
                 artifactId = calculateName(selfProject)
-                println "it: "+calculateName(selfProject)
 //                name
             }
         }

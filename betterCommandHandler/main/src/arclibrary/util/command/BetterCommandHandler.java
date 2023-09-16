@@ -16,6 +16,7 @@ import java.util.Objects;
  * Parses command syntax.
  * Recommend Arc Support plugin for Intellij idea (with version after 0.8.2) to highlight param language
  */
+//TODO add command preview
 @SuppressWarnings("UnknownLanguage")
 public class BetterCommandHandler extends CommandHandler {
     protected static final String[] EMPTY_STRING_ARRAY = new String[0];
@@ -259,6 +260,7 @@ public class BetterCommandHandler extends CommandHandler {
         }
     }
 
+    //TODO add translatable descriptions and maybe params
     public static class BCommand extends CommandHandler.Command {
 
         public final String myParamText;
@@ -274,7 +276,7 @@ public class BetterCommandHandler extends CommandHandler {
                     ((BCommandRunner.WrappedRunner) runner).runner.accept(args, parameter);
                     return;
                 }
-                throw new IllegalArgumentException("You cannot use ACommandHandler#runner");
+                throw new IllegalArgumentException("You cannot use BCommand#runner");
 //                runner.accept(, parameter);
             });
 //            myText = text;
@@ -283,6 +285,7 @@ public class BetterCommandHandler extends CommandHandler {
 
             creationStackStace = CreationStackTrace.create().getStringStackTrace(stackElementSkipper());
             paramPattern = ParamPatternParser.parse(paramText);
+            System.arraycopy(paramPattern.params, 0, params, 0, paramPattern.params.length);
         }
 
         @NotNull
@@ -322,17 +325,12 @@ public class BetterCommandHandler extends CommandHandler {
         }
     }
 
-    public static class BCommandParam {
-        public final String name;
-        public final boolean optional;
-        public final boolean variadic;
+    public static class BCommandParam extends CommandParam {
         @Nullable
         public final String handlerName;
 
         public BCommandParam(String name, boolean optional, boolean variadic, String handlerName) {
-            this.name = name;
-            this.optional = optional;
-            this.variadic = variadic;
+            super(name, optional, variadic);
             this.handlerName = handlerName;
         }
 

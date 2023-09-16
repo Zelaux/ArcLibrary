@@ -5,7 +5,6 @@ import arc.struct.*;
 
 public class Entries {
     //region creation
-
     public static IntFloatMap.Entry intFloatEntry(int key, float value) {
         IntFloatMap.Entry entry = new IntFloatMap.Entry();
         entry.key = key;
