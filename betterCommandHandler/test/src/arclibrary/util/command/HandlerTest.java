@@ -56,13 +56,14 @@ public class HandlerTest extends AdvancedCommandHandlerPartTest {
         handleMessage("test3 ddd", BetterCommandHandler.BResponseType.valid);
 
     }
+
     @Test
     public void testColor() {
-        handler.registerHandler("color",new ColorParamHandler("unknown color"));
+        handler.registerHandler("color", new ColorParamHandler("unknown color"));
         Color color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
         Color[] tests = {
-             Color.red,
-             Color.red,
+                Color.red,
+                Color.red,
                 Color.green,
                 Color.green,
                 Color.magenta,
@@ -87,7 +88,7 @@ public class HandlerTest extends AdvancedCommandHandlerPartTest {
         handleMessage("test #00FF00d", BetterCommandHandler.BResponseType.nonValidParam);
         handleMessage("test 123", BetterCommandHandler.BResponseType.nonValidParam);
         handleMessage("test hahaColor", BetterCommandHandler.BResponseType.nonValidParam);
-        handleMessage("test #"+color, BetterCommandHandler.BResponseType.valid);
+        handleMessage("test #" + color, BetterCommandHandler.BResponseType.valid);
 
     }
 }

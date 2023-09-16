@@ -120,7 +120,7 @@ public class Arguments {
         return get(paramIndex);
     }
 
-    public <T> T getOrCraeteDefault(int paramIndex, @NotNull Prov<T> def) {
+    public <T> T getOrCreateDefault(int paramIndex, @NotNull Prov<T> def) {
         if (!has(paramIndex)) return def.get();
         return get(paramIndex);
     }
