@@ -10,7 +10,7 @@ import arc.scene.ui.layout.*;
 import arc.scene.utils.*;
 import arc.util.*;
 import arclibrary.ui.defaults.DefaultBackground;
-import kotlin.jvm.internal.Ref.*;
+import arclibrary.utils.refs.Ref.*;
 
 
 public class Fields{

@@ -3,4 +3,5 @@ dependencies{
     compileOnly aproj(":ui:defaults")
     compileOnly aproj(":ui:tooltips")
     compileOnly aproj(":ui:listeners")
+    compileOnly aproj(":utils:refs")
 }

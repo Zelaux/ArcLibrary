@@ -13,7 +13,7 @@ import arc.scene.ui.Label.*;
 import arc.scene.ui.layout.*;
 import arc.struct.*;
 import arc.util.*;
-import kotlin.jvm.internal.Ref.*;
+import arclibrary.utils.refs.Ref.*;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.*;
 import arclibrary.ui.listeners.Listeners.*;

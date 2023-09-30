@@ -1,9 +1,8 @@
-ext {
+ext{
     versions = [:]
     libraries = [:]
 }
 versions.arc = "v145"
-
 libraries.jnigen = [
         "com.github.libgdx.gdx-jnigen:gdx-jnigen:$versions.jnigen"
 ]
@@ -12,81 +11,92 @@ libraries.getArc = { String moduleName ->
 }
 libraries.arcCore = libraries.getArc("arc-core")
 
-allprojects {
-    if (project.name.startsWith("my")) return;
+allprojects{
+    if(project.name.startsWith("my")) return;
     apply plugin: 'maven-publish'
     group = 'com.github.Zelaux.ZelauxArcLib'
     version = '1.0'
-
-    buildscript {
-        repositories {
+    buildscript{
+        repositories{
             mavenCentral()
-            maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+            maven{ url "https://oss.sonatype.org/content/repositories/snapshots/" }
             google()
-            maven { url 'https://jitpack.io' }
+            maven{ url 'https://jitpack.io' }
         }
     }
 
-    repositories {
+    repositories{
         mavenLocal()
         google()
         mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository/' }
+        maven{ url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven{ url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven{ url 'https://jitpack.io' }
+        maven{ url 'https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository/' }
     }
 
     ext.aproj = { String module ->
-        if (findProject(module) != null) {
+        if(findProject(module) != null){
             return project(module)
-        } else {
+        }else{
             return project(":ZelauxArcLib" + module)
         }
     }
 
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile){
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
         options.encoding = "UTF-8"
     }
-
 }
 
-Set<Project> projects = (System.getenv("JITPACK") != "true" ? subprojects - project(":test") : subprojects)
+Set<Project> projects = (System.getenv("JITPACK") != "true" ? subprojects - aproj(":test") : subprojects)
 
-String calculateName(Project proj) {
+String calculateName(Project proj){
 //    Set<Project> projects = System.getenv("JITPACK") != "true" ? rootProject.subprojects - project(":test") : rootProject.subprojects
-    if (proj.parent == rootProject) return proj.name;
+    if(proj.parent == rootProject) return proj.name;
     return calculateName(proj.parent) + "-" + proj.name
 }
 
-configure(projects) {
-    if (project.name.startsWith("my")) return;
+configure(projects){
+    if(project.name.startsWith("my")) return;
     apply plugin: "java-library"
 
-    compileJava {
+    compileJava{
         options.fork = true
         options.incremental = true
     }
 
-    java {
+    java{
         withJavadocJar()
         withSourcesJar()
     }
     def selfProject = project
-    publishing {
-        publications {
-            maven(MavenPublication) {
+    publishing{
+        publications{
+            maven(MavenPublication){
                 from components.java
                 artifactId = calculateName(selfProject)
 //                name
             }
         }
     }
+
+}
+
+void eachChild(Set<Project> set){
+    configure(set){
+        dependencies{
+            if(subprojects.size() == 0) compileOnly "org.jetbrains:annotations:24.0.1"
+        }
+//        sourceSets
+        eachChild(subprojects)
+    }
 }
 
 
-repositories {
+eachChild(projects)
+
+repositories{
     mavenCentral()
 }

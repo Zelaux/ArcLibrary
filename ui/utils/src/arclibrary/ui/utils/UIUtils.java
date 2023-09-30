@@ -2,16 +2,11 @@ package arclibrary.ui.utils;
 
 import arc.*;
 import arc.func.*;
-import arc.graphics.*;
-import arc.graphics.g2d.*;
 import arc.scene.*;
 import arc.scene.event.*;
 import arc.scene.ui.*;
-import arc.scene.ui.TextField.*;
-import arc.scene.ui.layout.*;
-import arc.scene.utils.*;
 import arc.util.*;
-import kotlin.jvm.internal.Ref.*;
+import org.intellij.lang.annotations.MagicConstant;
 
 
 public class UIUtils{
@@ -42,8 +37,8 @@ public class UIUtils{
     }
 
 
-
-    public static int invertAlign(int align){
+    @AlignConstant
+    public static int invertAlign(@AlignConstant int align){
         int result = align & Align.center;
 
         if((align & Align.left) != 0){
@@ -60,8 +55,6 @@ public class UIUtils{
         }
         return result;
     }
-
-
 
 
     public static float getX(float x, float width, int align){
@@ -91,6 +84,11 @@ public class UIUtils{
 
         Reflect.set(Button.class, button, "clickListener", newListener);
         button.addListener(newListener);
+
+    }
+
+    @MagicConstant(flagsFromClass = Align.class)
+    public @interface AlignConstant{
 
     }
 }

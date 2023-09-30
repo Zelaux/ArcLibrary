@@ -1,15 +1,20 @@
 include ":ui:defaults"
 include ":ui:utils"
 include ":ui:tooltips"
+include ":ui:tooltips-kt"
 include ":ui:components"
 include ":ui:listeners"
 
 include ":graphics:g3d"
 include ":graphics:draw3d"
+include ":graphics:drawText"
+include ":graphics:dashDraw"
+include ":graphics:extendedDraw"
 
 include ":utils:files"
 include ":utils:pools"
 include ":utils:entries"
+include ":utils:refs"
 
 include "settings"
 include "betterCommandHandler"
