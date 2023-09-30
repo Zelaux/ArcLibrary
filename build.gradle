@@ -96,6 +96,15 @@ void eachChild(Set<Project> set){
 
 
 eachChild(projects)
+/*
+static void printChild(int indent, Project project){
+    println "- ".repeat(indent)+project.name
+    for(final def sub in project.subprojects){
+        printChild(indent+1,sub)
+    }
+}
+printChild(0,project)
+*/
 
 repositories{
     mavenCentral()
