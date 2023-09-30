@@ -17,7 +17,7 @@ dependencies{
 }
 ```
 
-# Exported modules ():
+# Exported modules:
 
 - betterCommandHandler `betterCommandHandler`
 - graphics
