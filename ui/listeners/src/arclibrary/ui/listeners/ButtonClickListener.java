@@ -2,7 +2,11 @@ package arclibrary.ui.listeners;
 
 import arc.scene.event.*;
 import arc.scene.ui.*;
-
+/**
+ * Default implementation of {@link ClickListener} for {@link Button}.
+ *  <br>
+ * {@link Button} uses abstract implementation
+ * */
 public class ButtonClickListener extends ClickListener{
     public Button buttonObject;
 

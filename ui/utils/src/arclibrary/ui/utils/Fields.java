@@ -12,44 +12,30 @@ import arc.util.*;
 import arclibrary.ui.defaults.DefaultBackground;
 import arclibrary.utils.refs.Ref.*;
 
+/**
+ * Custom fields
+ */
 
 public class Fields{
     public static String tooBigNumberKey = "too-big-number";
     public static String numberOutOfRange = "number-out-of-range";
 
-    public static String wrapText(String originalString, Font font, float maxWidth){
-
-        GlyphLayout obtain = GlyphLayout.obtain();
-
-        obtain.setText(font, originalString);
-        if(obtain.width <= maxWidth){
-            obtain.free();
-            return originalString;
-        }
-        String[] words = originalString.split(" ");
-        StringBuilder builder = new StringBuilder();
-        int wordIndex = 0;
-        while(wordIndex < words.length){
-            builder.append(words[wordIndex]);
-            if(wordIndex + 1 == words.length){
-                break;
-            }
-            obtain.setText(font, builder + " " + words[wordIndex + 1]);
-            if(obtain.width <= maxWidth){
-                builder.append(" ");
-            }else{
-                builder.append("\n");
-            }
-            wordIndex++;
-        }
-        obtain.free();
-        return builder.toString();
-    }
-
+    /**
+     * If value duplicated field will change color
+     * @param duplicateKey key in {@link Core#bundle}
+     * @param validator Checks is value duplicated
+     */
     public static TextField uniqueField(String def, String duplicateKey, Cons<String> listener, Boolf<String> validator){
         return uniqueField(def, duplicateKey, listener, validator, new ObjectRef<>());
     }
-
+    /**
+     * If value duplicated field will change color
+     * @param duplicateKey key in {@link Core#bundle}
+     * @param validator Checks is value duplicated
+     * @param tooltipText if values is duplicated, tooltipText.element value will be <br>{@code
+     * Core.bundle.get(duplicateKey)
+     * }
+     */
     public static TextField uniqueField(String def, String duplicateKey, Cons<String> listener, Boolf<String> validator, ObjectRef<String> tooltipText){
         String duplicateMessage = Core.bundle.get(duplicateKey);
         TextField textField = Elem.newField(def, listener);
@@ -62,6 +48,7 @@ public class Fields{
     }
 
     //region ranged number fields
+
     public static Cell<TextField> rangedNumberField(Table table, @Nullable String name, int defaultValue, int minValue, int maxValue, Intc consumer){
         return rangedNumberField(table, name == null ? null : () -> Core.bundle.get(name), defaultValue, minValue, maxValue, consumer);
     }
@@ -72,7 +59,7 @@ public class Fields{
         if(nameProv != null){
             table.label(nameProv::get);
         }
-        return table.field(defaultValue + "", TextFieldFilter.digitsOnly, text -> {
+        return table.field(String.valueOf(defaultValue), TextFieldFilter.digitsOnly, text -> {
             if(!Strings.canParseInt(text)){
                 fieldRef.element.color.set(Color.scarlet);
                 tooltipText.element = Core.bundle.get(tooBigNumberKey);
@@ -103,7 +90,7 @@ public class Fields{
         if(nameProv != null){
             table.label(nameProv::get);
         }
-        return table.field(defaultValue % 1f == 0 ? ((int)defaultValue) + "" : defaultValue + "", TextFieldFilter.floatsOnly, text -> {
+        return table.field(defaultValue % 1f == 0 ? String.valueOf((int)defaultValue) : String.valueOf(defaultValue), TextFieldFilter.floatsOnly, text -> {
             if(!Strings.canParseFloat(text)){
                 fieldRef.element.color.set(Color.scarlet);
                 tooltipText.element = Core.bundle.get(tooBigNumberKey);

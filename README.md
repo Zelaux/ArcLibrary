@@ -26,14 +26,14 @@ dependencies{
     - drawText `graphics-drawText`
     - extendedDraw `graphics-extendedDraw`
     - g3d `graphics-d3g`
-- settings `settings`
-- ui
-    - components `ui-components`
-    - defaults `ui-default`
-    - listeners `ui-listeners`
-    - tooltips `ui-tooltips`
-    - tooltips-kt `ui-tooltips-kt` (kotlin dsl for `ui-tooltips`)
-    - utils `ui-utils`
+- [settings](settings%2FREADME.md) `settings`
+- [ui](ui%2FREADME.md)
+    - [components](ui%2FREADME.md#components) `ui-components`
+    - [defaults](ui%2FREADME.md#defaults) `ui-default`
+    - [listeners](ui%2FREADME.md#listeners) `ui-listeners`
+    - [tooltips](ui%2FREADME.md#tooltips) `ui-tooltips`
+    - [tooltips-kt](ui%2FREADME.md#tooltips) `ui-tooltips-kt` (kotlin dsl for `ui-tooltips`)
+    - [utils](ui%2FREADME.md#utils) `ui-utils`
 - [utils](utils%2FREADME.md)
     - [entries](utils%2FREADME.md#entries) `utils-entries`
     - [files](utils%2FREADME.md#files) `utils-files`

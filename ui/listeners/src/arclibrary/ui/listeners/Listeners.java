@@ -5,10 +5,16 @@ import arc.func.*;
 import arc.input.*;
 import arc.scene.*;
 import arc.scene.event.*;
+import org.jetbrains.annotations.*;
 
+/**
+ *
+ */
 public class Listeners{
-
-    public static void onScreenClick(Cons<Element> action){
+    /**
+     * Invoke action on clicked element on screen
+     */
+    public static void onScreenClick(@NotNull Cons<Element> action){
         Core.scene.addListener(new ClickListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, KeyCode button){
@@ -18,11 +24,18 @@ public class Listeners{
         });
     }
 
-    public static void onScreenClick(Element element, Action action){
+    /**
+     * Adds an action to an element when any of its descendants are clicked
+     */
+    public static void onScreenClick(@NotNull Element element, @NotNull Action action){
         onScreenClick(element, action, true);
     }
 
-    public static void onScreenClick(Element element, Action action, boolean removeIfRemoved){
+    /**
+     * Adds an action to an element when any of its descendants are clicked
+     * @param removeIfRemoved marks remove listener after invocation or not
+     */
+    public static void onScreenClick(@NotNull Element element, @NotNull Action action, boolean removeIfRemoved){
 
         Core.scene.addListener(new ClickOnOtherListener(() -> {
             if(element.getScene() != null){
@@ -33,11 +46,11 @@ public class Listeners{
     }
 
     public static class ClickOnOtherListener extends ClickListener{
-        public Boolp runnable;
+        public Boolp shouldRemove;
         public HitChecker hitChecker;
 
-        public ClickOnOtherListener(Boolp runnable, HitChecker hitChecker){
-            this.runnable = runnable;
+        public ClickOnOtherListener(Boolp shouldRemove, HitChecker hitChecker){
+            this.shouldRemove = shouldRemove;
             this.hitChecker = hitChecker;
         }
 
@@ -46,7 +59,7 @@ public class Listeners{
             Element hit = Core.scene.hit(x, y, false);
 
             if(hit == null || !hitChecker.hit(hit)){
-                if(runnable.get()){
+                if(shouldRemove.get()){
                     Core.scene.removeListener(this);
                 }
             }

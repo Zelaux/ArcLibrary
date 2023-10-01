@@ -2,6 +2,7 @@ package arclibrary.ui.utils;
 
 import arc.*;
 import arc.func.*;
+import arc.graphics.g2d.*;
 import arc.scene.*;
 import arc.scene.event.*;
 import arc.scene.ui.*;
@@ -10,6 +11,37 @@ import org.intellij.lang.annotations.MagicConstant;
 
 
 public class UIUtils{
+    /**
+     * Adds '\n' if text not within maxWidth
+     * */
+    public static String wrapText(String originalString, Font font, float maxWidth){
+
+        GlyphLayout obtain = GlyphLayout.obtain();
+
+        obtain.setText(font, originalString);
+        if(obtain.width <= maxWidth){
+            obtain.free();
+            return originalString;
+        }
+        String[] words = originalString.split(" ");
+        StringBuilder builder = new StringBuilder();
+        int wordIndex = 0;
+        while(wordIndex < words.length){
+            builder.append(words[wordIndex]);
+            if(wordIndex + 1 == words.length){
+                break;
+            }
+            obtain.setText(font, builder + " " + words[wordIndex + 1]);
+            if(obtain.width <= maxWidth){
+                builder.append(" ");
+            }else{
+                builder.append("\n");
+            }
+            wordIndex++;
+        }
+        obtain.free();
+        return builder.toString();
+    }
     @Nullable
     public static Element hovered(Boolf<Element> validator){
         Element e = Core.scene.hit(Core.input.mouseX(), Core.input.mouseY(), true);

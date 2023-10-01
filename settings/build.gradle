@@ -1,7 +1,4 @@
 
-plugins{
-    id 'org.jetbrains.kotlin.jvm' version '1.7.10'
-}
 sourceSets.main.java.srcDirs = ["src"]
 sourceSets.test.resources.srcDirs = ["test/resources"]
 
@@ -23,12 +20,4 @@ test{
 
 test{
     useJUnitPlatform()
-}
-
-compileKotlin{
-    kotlinOptions.jvmTarget = '1.8'
-}
-
-compileTestKotlin{
-    kotlinOptions.jvmTarget = '1.8'
 }
