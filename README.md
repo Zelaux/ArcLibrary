@@ -20,12 +20,12 @@ dependencies{
 # Exported modules:
 
 - betterCommandHandler `betterCommandHandler`
-- graphics
-    - dashDraw `graphics-dashDraw`
-    - draw3d `graphics-draw3d`
-    - drawText `graphics-drawText`
-    - extendedDraw `graphics-extendedDraw`
-    - g3d `graphics-d3g`
+- [graphics](graphics%2FREADME.md)
+    - [dashDraw](graphics%2FREADME.md#dashDraw) `graphics-dashDraw`
+    - [draw3d](graphics%2FREADME.md#draw3d) `graphics-draw3d`
+    - [drawText](graphics%2FREADME.md#drawText) `graphics-drawText`
+    - [extendedDraw](graphics%2FREADME.md#extendedDraw) `graphics-extendedDraw`
+    - [g3d](graphics%2Fg3d%2FREADME.md) `graphics-d3g`
 - [settings](settings%2FREADME.md) `settings`
 - [ui](ui%2FREADME.md)
     - [components](ui%2FREADME.md#components) `ui-components`

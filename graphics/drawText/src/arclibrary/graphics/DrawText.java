@@ -12,7 +12,9 @@ import arc.struct.*;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
-
+/**
+ * Draws text on screen without label or other stuff
+ * */
 public class DrawText{
     @Nullable
     public static Font defaultFont;
