@@ -13,15 +13,20 @@ repositories{
     maven{ url  'https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository' }//for Arc
     maven{ url 'https://raw.githubusercontent.com/Zelaux/Repo/master/repository' }//for ArcLibrary
 }
+static String arcLibraryModule(String name){
+    //module path to full module name
+    if(name.contains(':')) name = name.split(':').join("-")
+    return "com.github.Zelaux.ArcLibrary:$name:$arcLibraryVersion"
+}
 //use this if you do not need Arc in result jar
 dependencies{
     compileOnly "com.github.Anuken.Arc:arc-core:$arcVersion"
-    implementation "com.github.Zelaux.ArcLibrary:$fullModuleName:$arcLibraryVersion"
+    implementation arcLibraryModule("$fullModuleName")
 }
 //use this if you do need Arc in result jar
 dependencies{
     implementation "com.github.Anuken.Arc:arc-core:$arcVersion"
-    implementation "com.github.Zelaux.ArcLibrary:$fullModuleName:$arcLibraryVersion"
+    implementation arcLibraryModule("$fullModuleName")
 }
 ```
 
