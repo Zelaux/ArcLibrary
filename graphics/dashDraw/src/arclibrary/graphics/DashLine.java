@@ -215,20 +215,20 @@ public class DashLine{
 
     static class PointList implements Poolable{
         public float[] cords;
-        public float len;
+        public int len;
 
-        public PointList set(float[] cords, float len){
+        public PointList set(float[] cords, int len){
             this.cords = cords;
             this.len = len;
             return this;
         }
 
         public float x(int i){
-            return Mathf.mod(i * 2, len);
+            return cords[Mathf.mod(i * 2, len)];
         }
 
         public float y(int i){
-            return Mathf.mod(i * 2 + 1, len);
+            return cords[Mathf.mod(i * 2 + 1, len)];
         }
 
         public void free(){
