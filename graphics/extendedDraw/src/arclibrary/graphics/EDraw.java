@@ -38,10 +38,10 @@ public class EDraw{
     public static void rect(Texture texture, float x, float y, float width, float height){
         float color = Draw.getColor().toFloatBits();
         quad(texture,
-            x, y, color, 0, 0,
-            x, y + height, color, 0, 1,
-            x + width, y + height, color, 1, 1,
-            x + width, y, color, 1, 0
+            x, y, color, 0, 1,
+            x, y + height, color, 0, 0,
+            x + width, y + height, color, 1, 0,
+            x + width, y, color, 1, 1
         );
     }
 
