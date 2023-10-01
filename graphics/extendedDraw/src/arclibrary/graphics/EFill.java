@@ -28,35 +28,6 @@ public class EFill{
 
     public static void ellipse(float x, float y, float width, float height, float finion, float angle, float rotation){
         donutEllipse(x, y, 0, 0, width, height, finion, angle, rotation);
-       /* final float sides = 60;
-        finion = Mathf.clamp(finion);
-        int max = (int)(sides * (finion + 0.001F));
-        vector.set(0F,0f);
-        floats.clear();
-
-        floats.add(x, y);
-        Cons<Float> cons = (i) -> {
-            float degrees = 360F / sides * i + angle;
-            vector.set(1,0f).setAngle(degrees);
-            vector.scl(width, height);
-//            floats.add(Mathf.cos(degrees) * width + x, Mathf.sin(degrees) * height + y);
-            floats.add(vector.x + x, vector.y + y);
-        };
-        int startI = 0;
-        if(max % 2 != 0){
-            startI = 1;
-            cons.get(0f);
-            cons.get(1f);
-            cons.get(1f);
-//            cons.get(2f);
-        }
-        for(float i = startI; i < (max); i += 2f){
-            cons.get(i);
-            cons.get(i + 1f);
-            cons.get(i + 2f);
-        }
-        if(max > 0) poly(floats);
-*/
     }
 
     public static void donut(float x, float y, float radius1, float radius2){
@@ -148,10 +119,10 @@ public class EFill{
         }
 
         private void apply2(float ix){
-            adddPoints(360f * finion / max * ix, width2, height2, width, height);
+            addPoints(360f * finion / max * ix, width2, height2, width, height);
         }
 
-        private void adddPoints(float v, float startWidth, float startHeight, float endWidth, float endHeight){
+        private void addPoints(float v, float startWidth, float startHeight, float endWidth, float endHeight){
             vector.set(0.5f, 0).setAngle(v + angleOffset).scl(startWidth, startHeight).rotate(rotation);
             floats.add(vector.x + x, vector.y + y);
             vector.set(0.5f, 0f).setAngle(v + angleOffset).scl(endWidth, endHeight).rotate(rotation);
@@ -159,7 +130,7 @@ public class EFill{
         }
 
         private void apply1(Float ix){
-            adddPoints(360f * finion / max * ix, width, height, width2, height2);
+            addPoints(360f * finion / max * ix, width, height, width2, height2);
         }
     }
 }

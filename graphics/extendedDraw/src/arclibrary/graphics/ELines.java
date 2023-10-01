@@ -26,10 +26,16 @@ public class ELines{
     }
 
     //region rect
+    /**
+     * Draws square without overlapping sides(useful when you use alpha)
+     */
     public static void square(float x, float y, float rad){
         rect(x - rad, y - rad, rad * 2.0F, rad * 2.0F);
     }
 
+    /**
+     * Draws rect without overlapping sides(useful when you use alpha)
+     */
     public static void rect(float x, float y, float width, float height, float originX, float originY, float rotation){
         float stroke = Lines.getStroke();
         float doubleStroke = stroke * 2f;
@@ -53,14 +59,23 @@ public class ELines{
         floats.add(tmp1.x, tmp1.y);
     }
 
+    /**
+     * Draws rect without overlapping sides(useful when you use alpha)
+     */
     public static void rect(float x, float y, float width, float height){
         rect(x, y, width, height, 0);
     }
 
+    /**
+     * Draws rect without overlapping sides(useful when you use alpha)
+     */
     public static void rect(float x, float y, float width, float height, float rot){
         rect(x, y, width, height, width / 2f, height / 2f, rot);
     }
 
+    /**
+     * Draws rect without overlapping sides(useful when you use alpha)
+     */
     public static void rect(Rect rect){
         rect(rect.x, rect.y, rect.width, rect.height, 0);
     }
