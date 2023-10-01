@@ -1,6 +1,5 @@
 package arclibrary.graphics;
 
-import arc.func.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.math.geom.*;
@@ -8,15 +7,18 @@ import arc.struct.*;
 import arc.util.*;
 import arc.util.pooling.*;
 import arc.util.pooling.Pool.*;
+
 /**
  * Draws polies with dash lines with same length and same spacing length
- * */
+ */
 public class DashLine{
+    @SuppressWarnings("unused")
     private static final Vec2 tmp1 = new Vec2(), tmp2 = new Vec2(), tmp3 = new Vec2(), tmp4 = new Vec2();
     private static final Vec2 vector = new Vec2(), u = new Vec2(), v = new Vec2(), inner = new Vec2(), outer = new Vec2();
     private static final Pool<PointList> pointListPool = Pools.get(PointList.class, PointList::new);
-    private static FloatSeq floats = new FloatSeq(20);
+    private static final FloatSeq floats = new FloatSeq(20);
 
+    @SuppressWarnings("unused")
     public static void dashPoly(float... cords){
         dashPolyWithLength(10, cords);
     }
@@ -31,7 +33,6 @@ public class DashLine{
         try{
             float stroke = Lines.getStroke();
             floats.clear();
-            int iterationsCount = realSize;
             begin:
             {
                 float x = pointList.x(0), y = pointList.y(0);
@@ -48,6 +49,7 @@ public class DashLine{
                     y - diffy - diffx);
             }
             for(int i = 0; i < realSize - 2; i++){
+                //noinspection UnnecessaryLocalVariable
                 int i0 = i;
                 int i1 = i + 1;
                 int i2 = i + 2;
@@ -65,13 +67,6 @@ public class DashLine{
                 if(beta == 0){
                     v.setZero();
                     float hstroke = stroke / 2f;
-                    float len0 = Mathf.len(x1 - x0, y1 - y0);
-                    float dx2 = x2 - x1;
-                    float dy2 = y2 - y1;
-                    float len1 = Mathf.len(dx2, dy2);
-                    float
-                        diffx = Mathf.lerp((x1 - x0) / len0, dx2 / len1, 0.5f) * hstroke,
-                        diffy = Mathf.lerp((y1 - y0) / len0, dy2 / len1, 0.5f) * hstroke;
                     tmp1.set(x2, y2).sub(x1, y1);
                     tmp2.set(x0, y0).sub(x1, y1);
                     float angleDiff = Mathf.mod(tmp1.angle() - tmp2.angle(), 360);
@@ -84,14 +79,6 @@ public class DashLine{
                         ,
                         tmp2.x + x1, tmp2.y + y1
                     );
-               /* floats.add(
-
-                x1 - diffy,
-                y1 + diffx,
-
-                x1 + diffy,
-                y1 - diffx
-                );*/
                     continue;
                 }
 
@@ -161,7 +148,6 @@ public class DashLine{
             final float len2 = len * len;
             boolean line = true;
             float cornerPercent = -1;
-            int color = Draw.getColor().rgba();
 
             for(int currentIndex = 0; currentIndex < cords.length / 2; currentIndex++){
                 Vec2 cur = Tmp.v1.set(pointList.x(currentIndex), pointList.y(currentIndex));
@@ -180,21 +166,17 @@ public class DashLine{
                         }
                         line = !line;
                         position.add(vector);
-                        cornerPercent = -1;
+                        //cornerPercent = -1;
                     }else{
                         cornerPercent = 1f - position.dst(next) / len;
 
                         Vec2 nextPosition;
-                        //                    System.out.println("\n\n\n\n");
                         int nextIndex = currentIndex + 2;
                         FloatSeq floats = new FloatSeq();
                         floats.add(position.x, position.y);
                         floats.add(next.x, next.y);
                         do{
                             if(nextIndex % cords.length == 0){
-                                if(line){
-                                    //                                brokenLine(floats.toArray());
-                                }
                                 return;
                             }
                             float next2x = pointList.x(nextIndex);
@@ -210,8 +192,6 @@ public class DashLine{
                             }
                             floats.add(currentx + nextPosition.x, currenty + nextPosition.y);
                             if(nextLen < perfectLen && cornerPercent > 0.0000001f){
-                                //                            Log.info("cornerPercent: @(@,@)",
-                                //                            cornerPercent, cornerPercent * len, nextLen);
                                 cornerPercent = (perfectLen - nextLen) / len;
                             }else{
                                 break;
@@ -220,11 +200,9 @@ public class DashLine{
                         }while(true);
                         currentIndex = nextIndex - 2;
                         if(line){
-                            //                        Lines.polyline(floats, false);
                             brokenLine(floats.toArray());
                         }
                         line = !line;
-                        //                    Lines.
                         break;
                     }
                 }
