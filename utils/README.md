@@ -21,7 +21,7 @@ Adds `set`, `create` and `copy` methods for each exited Entry type in `Arc`
 
 TODO
 
-[//]: # (TODO)
+Adds [`arclibrary.utils.files.InternalFileTree`](files%2Fsrc%2Farclibrary%2Futils%2Ffiles%2FInternalFileTree.java) for internal jar navigation.
 
 ---
 # <a name="pools"></a>Pools
