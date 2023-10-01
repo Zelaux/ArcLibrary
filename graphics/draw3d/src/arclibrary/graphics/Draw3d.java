@@ -5,7 +5,9 @@ import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
 import arc.math.geom.Mat3D;
 import arc.math.geom.Vec3;
-
+/**
+ * Draws 2d region with applying {@link Mat3D}
+ * */
 public class Draw3d {
     public static final Mat3D tmpMat1 = new Mat3D();
     public static final Mat3D tmpMat2 = new Mat3D();
@@ -80,9 +82,9 @@ public class Draw3d {
         Draw.vert(region.texture, vertices, 0, vertices.length);
     }
 
-    private static void doubleLast(int idx, Vec3 v5, float color, float mixColor, float u5, float _v5) {
-        idx = vertex(idx, v5, u5, _v5, color, mixColor);
-        idx = vertex(idx, v5, u5, _v5, color, mixColor);
+    private static void doubleLast(int idx, Vec3 vector, float color, float mixColor, float u5, float _v5) {
+        idx = vertex(idx, vector, u5, _v5, color, mixColor);
+        idx = vertex(idx, vector, u5, _v5, color, mixColor);
     }
 
     private static int vertex(int idx, Vec3 v1, float u, float v, float color, float mixColor) {

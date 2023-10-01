@@ -8,7 +8,9 @@ import arc.struct.*;
 import arc.util.*;
 import arc.util.pooling.*;
 import arc.util.pooling.Pool.*;
-
+/**
+ * Draws polies with dash lines with same length and same spacing length
+ * */
 public class DashLine{
     private static final Vec2 tmp1 = new Vec2(), tmp2 = new Vec2(), tmp3 = new Vec2(), tmp4 = new Vec2();
     private static final Vec2 vector = new Vec2(), u = new Vec2(), v = new Vec2(), inner = new Vec2(), outer = new Vec2();
