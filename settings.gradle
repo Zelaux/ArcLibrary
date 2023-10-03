@@ -15,6 +15,7 @@ include ":utils:files"
 include ":utils:pools"
 include ":utils:entries"
 include ":utils:refs"
+include ":utils:io"
 
 include "settings"
 include "betterCommandHandler"

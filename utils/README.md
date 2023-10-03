@@ -2,6 +2,7 @@
 
 - [Entries](#entries)
 - [Files](#files)
+- [IO](#io)
 - [Pools](#pools)
 - [Refs](#refs)
 
@@ -22,6 +23,16 @@ Adds `set`, `create` and `copy` methods for each exited Entry type in `Arc`
 Adds [`arclibrary.utils.files.InternalFileTree`](files%2Fsrc%2Farclibrary%2Futils%2Ffiles%2FInternalFileTree.java) for internal jar navigation.
 
 ---
+## <a name="ui"></a> UI
+
+###### Full name: `utils-ui`
+
+### Adds
+- [ByteReads](io%2Fsrc%2Farclibrary%2Fio%2FByteReads.java)
+- [ByteWrites](io%2Fsrc%2Farclibrary%2Fio%2FByteWrites.java)
+
+----
+
 # <a name="pools"></a>Pools
 
 ###### Full name: `utils-pools`
