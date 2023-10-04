@@ -11,9 +11,10 @@ include ":graphics:drawText"
 include ":graphics:dashDraw"
 include ":graphics:extendedDraw"
 
+include ":utils:entries"
+include ":utils:events"
 include ":utils:files"
 include ":utils:pools"
-include ":utils:entries"
 include ":utils:refs"
 include ":utils:io"
 

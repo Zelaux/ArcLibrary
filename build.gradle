@@ -87,7 +87,11 @@ configure(projects){
 void eachChild(Set<Project> set){
     configure(set){
         dependencies{
-            if(subprojects.size() == 0) compileOnly "org.jetbrains:annotations:24.0.1"
+            if(subprojects.size() == 0){
+                compileOnly "org.jetbrains:annotations:24.0.1"
+                testImplementation 'junit:junit:4.13.1'
+                testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.8.2")
+            }
         }
 //        sourceSets
         eachChild(subprojects)
