@@ -49,6 +49,7 @@ dependencies{
     - [utils](ui%2FREADME.md#utils) `ui-utils`
 - [utils](utils%2FREADME.md)
     - [entries](utils%2FREADME.md#entries) `utils-entries`
+    - [events](utils%2FREADME.md#events) `utils-events`
     - [files](utils%2FREADME.md#files) `utils-files`
     - [io](utils%2FREADME.md#io) `utils-io`
     - [pools](utils%2FREADME.md#pools) `utils-pools`
