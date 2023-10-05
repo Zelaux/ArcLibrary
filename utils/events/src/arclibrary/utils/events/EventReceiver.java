@@ -3,25 +3,24 @@ package arclibrary.utils.events;
 import arc.*;
 import arc.func.*;
 import arc.struct.*;
+import org.jetbrains.annotations.*;
 
-public class EventReceiver{
+public class EventReceiver<T>{
     public final String commandName;
-    public final EventSignature signature;
+    public final EventSignature<T> signature;
     private final ObjectMap<String, Object> parametersMap = new ObjectMap<>();
 
-    public EventReceiver(EventSender sender){
+    public EventReceiver(EventSender<T> sender){
         this(sender.commandName, sender.signature);
     }
 
-    public EventReceiver(String commandName, EventSignature signature){
+    public EventReceiver(String commandName,@NotNull EventSignature<T> signature){
         this.commandName = commandName;
         this.signature = signature;
     }
 
-    @Deprecated
-    public EventReceiver(String commandName){
-        this.commandName = commandName;
-        signature = null;
+    public static <T> EventReceiver<T> from(EventSender<T> sender){
+        return new EventReceiver<>(sender);
     }
 
     public int paramsAmount(){
@@ -64,8 +63,8 @@ public class EventReceiver{
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T getParameter(String name){
-        return (T)parametersMap.getNull(name);
+    public <P> P getParameter(String name){
+        return (P)parametersMap.getNull(name);
     }
 
     public Number getNumParam(String name){
@@ -76,7 +75,7 @@ public class EventReceiver{
         return getParameter(name);
     }
 
-    public void post(Cons<EventReceiver> cons){
+    public void post(Cons<EventReceiver<T>> cons){
         Events.on(Object[].class, objects1 -> {
             if(set(objects1)){
                 try{
@@ -89,7 +88,11 @@ public class EventReceiver{
         });
     }
 
-    private static class UnknownObjects extends Exception{
-
+    public void postObject(Cons<T> cons){
+        if(!signature.hasClass())throw new IllegalArgumentException("postObject not supported for signature without class");
+        signature.checkSupportMakeObject();
+        post(self->{
+            cons.get(signature.makeObject(self));
+        });
     }
 }

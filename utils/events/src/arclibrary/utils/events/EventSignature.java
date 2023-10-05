@@ -1,37 +1,88 @@
 package arclibrary.utils.events;
 
 import arc.struct.*;
+import arc.util.*;
 import lombok.*;
 import lombok.experimental.*;
+import org.jetbrains.annotations.Nullable;
 
+import java.beans.*;
+import java.lang.reflect.*;
 import java.util.*;
 
-public class EventSignature{
+public class EventSignature<T>{
+
     public static final String eventSignatureParam = "_\n_EVENT_SIGNATURE__";
     private static final ThreadLocal<Bits> bits = ThreadLocal.withInitial(Bits::new);
+    private static final Class<Void> defaultClass = Void.class;
+    ;
     final Seq<Parameter> parameters = new Seq<>();
+    private final Class<T> myClass;
 
-    public static EventSignature empty(){
-        return new EventSignature();
+    public EventSignature(Class<T> myClass){
+        this.myClass = myClass;
+
     }
 
-    public static EventSignature make(String name, Class<?> type){
-        return new EventSignature().with(name, type);
+    public static <T> EventSignature<T> fromClass(Class<T> clazz){
+        if(clazz == null) throw new NullPointerException("class is null.");
+        if(clazz.isAnonymousClass()) throw new IllegalArgumentException("class cannot be anonymous.");
+        if(clazz.isInterface()) throw new IllegalArgumentException("class cannot be interface.");
+        if(clazz.isEnum()) throw new IllegalArgumentException("enum is unsupported");
+        EventSignature<T> signature = new EventSignature<>(clazz);
+        Class<?> c = clazz;
+        while(c != null){
+            Field[] fields = c.getDeclaredFields();
+            for(Field field : fields){
+                if(!Modifier.isPublic(field.getModifiers()) || Modifier.isStatic(field.getModifiers())) continue;
+                boolean nullable = Structs.contains(field.getAnnotations(), it -> it.annotationType().getSimpleName().equals("Nullable"));
+                if(nullable){
+                    signature.optional(field.getName(), field.getType());
+                }else{
+                    signature.required(field.getName(), field.getType());
+                }
+            }
+            c = c.getSuperclass();
+        }
+        return signature;
     }
 
-    public EventSignature with(String name, Class<?> type){
+    @SuppressWarnings("UnusedReturnValue")
+    public static EventSignature<Void> empty(){
+        return new EventSignature<>(defaultClass);
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    public static EventSignature<Void> make(String name, Class<?> type){
+        return empty().with(name, type);
+    }
+
+    private static void throwMakeObjectNotSupport(){
+        throw new IllegalArgumentException("makeObject() is not supported(has no candidate constructor)");
+    }
+
+    public boolean hasClass(){
+        return myClass != defaultClass;
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+
+    public EventSignature<T> with(String name, Class<?> type){
         return required(name, type);
     }
 
-    public EventSignature required(String name, Class<?> type){
+    @SuppressWarnings("UnusedReturnValue")
+    public EventSignature<T> required(String name, Class<?> type){
         return with(name, type, true);
     }
 
-    public EventSignature optional(String name, Class<?> type){
+    @SuppressWarnings("UnusedReturnValue")
+    public EventSignature<T> optional(String name, Class<?> type){
         return with(name, type, false);
     }
 
-    public EventSignature with(String name, Class<?> type, boolean required){
+    @SuppressWarnings("UnusedReturnValue")
+    public EventSignature<T> with(String name, Class<?> type, boolean required){
         parameters.add(new Parameter(name, required, type));
         return this;
     }
@@ -73,6 +124,66 @@ public class EventSignature{
 
     public int amount(){
         return parameters.size;
+    }
+
+    @SneakyThrows
+    public T makeObject(EventReceiver<T> receiver){
+        Constructor<?> constructor = findCandidateConstructor();
+        if(constructor == null) throwMakeObjectNotSupport();
+        T result;
+        if(constructor.getParameterCount() == 0){
+            //noinspection unchecked
+            result = (T)constructor.newInstance();
+            for(Parameter parameter : parameters){
+                Reflect.set(result, parameter.name, receiver.getParameter(parameter.name));
+            }
+        }else{
+            Object[] parameters = Arrays.stream(constructor.getAnnotation(ConstructorProperties.class)
+                    .value())
+                .map(receiver::getParameter)
+                .toArray();
+            //noinspection unchecked
+            result = (T)constructor.newInstance(parameters);
+        }
+        return result;
+    }
+
+    public void checkSupportMakeObject(){
+        if(findCandidateConstructor() == null) throwMakeObjectNotSupport();
+    }
+
+    /** If you want support for {@link lombok.AllArgsConstructor}
+     * Do not forget to enable<br/><b>lombok.anyConstructor.addConstructorProperties</b><br/> in your
+     * <a href="https://projectlombok.org/features/configuration">lombok.config</a>
+     * */
+    @Nullable
+    private Constructor<?> findCandidateConstructor(){
+        Constructor<?>[] declaredConstructors = myClass.getDeclaredConstructors();
+        Constructor<?> candidate = null;
+        for(Constructor<?> constructor : declaredConstructors){
+            if(constructor.getParameterCount() == 0){
+                candidate = constructor;
+                break;
+            }
+        }
+        if(candidate == null){
+            candidate = Structs.find(declaredConstructors, it -> {
+                if(it.getParameterCount() != parameters.size) return false;
+                /*Support for @lombok.AllArgsConstructor do not forget to enable `` in lombok.config*/
+                ConstructorProperties annotation = it.getAnnotation(ConstructorProperties.class);
+                if(annotation == null) return false;
+                String[] value = annotation.value();
+                for(String s : value){
+                    if(!parameters.contains(parameter -> parameter.name.equals(s))) return false;
+                }
+                return true;
+            });
+        }
+        return candidate;
+    }
+
+    public Class<T> targetClass(){
+        return myClass;
     }
 
     @AllArgsConstructor

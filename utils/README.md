@@ -28,7 +28,8 @@ Adds `set`, `create` and `copy` methods for each exited Entry type in `Arc`
 - [EventSignature](events%2Fsrc%2Farclibrary%2Futils%2Fevents%2FEventSignature.java)
 
 ### Example usage
-- [EventsTest](events%2Ftest%2Farclibrary%2Futils%2Fevents%2FEventsTest.java)
+- [TestParallel](events%2Ftest%2Farclibrary%2Futils%2Fevents%2FTestParallel.java)
+- [TestSignature](events%2Ftest%2Farclibrary%2Futils%2Fevents%2FTestSignature.java)
 
 ----
 
