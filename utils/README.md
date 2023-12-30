@@ -37,7 +37,8 @@ Adds `set`, `create` and `copy` methods for each exited Entry type in `Arc`
 
 ###### Full name: `utils-files`
 
-Adds [`arclibrary.utils.files.InternalFileTree`](files%2Fsrc%2Farclibrary%2Futils%2Ffiles%2FInternalFileTree.java) for internal jar navigation.
+Adds: 
+- [InternalFileTree](files%2Fsrc%2Farclibrary%2Futils%2Ffiles%2FInternalFileTree.java)
 
 ---
 ## <a name="ui"></a> UI
