@@ -1,6 +1,6 @@
 # <a name="settings"></a> Settings
 
-###### Full name: `ui-settings`
+###### Full name: `settings`
 
 ### Adds
 
