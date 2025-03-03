@@ -15,7 +15,11 @@ public class EnumIdSettingKey<T extends Enum<T>> extends SettingKey<T> {
         super(key, defaultProvider, EnumIdSettingKey::get, EnumIdSettingKey::set);
         this.values = values;
     }
-
+    
+    public final T[] getValues(){//TODO array copy
+        return this.values;
+    }
+    
     private static <T extends Enum<T>> T get(SettingKey<T> it) {
         T[] values = ((EnumIdSettingKey<T>) it).values;
         return values[Core.settings.getInt(it.key, it.def().ordinal())];
