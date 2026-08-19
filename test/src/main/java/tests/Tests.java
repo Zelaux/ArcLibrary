@@ -7,7 +7,7 @@ import arc.backend.sdl.SdlApplication;
 import arc.backend.sdl.SdlConfig;
 import arc.files.Fi;
 import arc.graphics.Gl;
-import arc.graphics.g2d.SortedSpriteBatch;
+import arc.graphics.g2d.SpriteBatch;
 import arc.graphics.g3d.*;
 import arc.input.*;
 import arc.math.*;
@@ -23,7 +23,7 @@ public class Tests extends ApplicationCore{
         Log.info(new BigNumber(4).set(0b10).mul(new BigNumber(4).set(0b11)));*/
 
         new SdlApplication(new Tests(), new SdlConfig(){{
-            gl30 = true;
+            glVersions = new int[][]{{3, 3}, {2, 0}};
             title = "G3D test";
             maximized = true;
         }});
@@ -42,7 +42,7 @@ public class Tests extends ApplicationCore{
         new ObjectShader(new Fi("shaders/objecttype/shader.vert", Files.FileType.internal),
         new Fi("shaders/objecttype/shader.frag", Files.FileType.internal))));
 
-        Core.batch = new SortedSpriteBatch();
+        Core.batch = new SpriteBatch();
 
         Log.info("[Tests] Setup time: @ms", Time.elapsed());
 
@@ -95,7 +95,7 @@ public class Tests extends ApplicationCore{
     @Override
     public void update(){
         Camera3D cam = TestVars.renderer3D.cam;
-        cam.unproject(curMouseRad.set(Core.input.mouse(), 0));
+        cam.unproject(curMouseRad.set(Core.input.mouseX(), Core.input.mouseY(), 0));
         curMouseRad.nor();
 
 
@@ -106,7 +106,7 @@ public class Tests extends ApplicationCore{
 
 
 //        cam.unproject(curMouseRad.set(Core.graphics.getWidth()-Core.input.mouseX(),Core.graphics.getHeight()-Core.input.mouseY(), 0));
-        cam.unproject(Tmp.v32.set(Core.input.mouse(), 0));
+        cam.unproject(Tmp.v32.set(Core.input.mouseX(), Core.input.mouseY(), 0));
         Tmp.v32.nor();
         cam.unproject(Tmp.v31.set(Core.input.mouseX() - Core.input.deltaX(), Core.input.mouseY() - Core.input.deltaY(), 0));
         Tmp.v31.nor();
@@ -126,7 +126,7 @@ public class Tests extends ApplicationCore{
 
 
 //        cam.unproject(curMouseRad.set(Core.graphics.getWidth()-Core.input.mouseX(),Core.graphics.getHeight()-Core.input.mouseY(), 0));
-                cam.unproject(curMouseRad.set(Core.input.mouse(), 0));
+                cam.unproject(curMouseRad.set(Core.input.mouseX(), Core.input.mouseY(), 0));
                 curMouseRad.nor();
             }
 //            float deltaY = Core.input.mouseY() - prevMouse.y;

@@ -64,7 +64,7 @@ public class EventReceiver<T>{
 
     @SuppressWarnings("unchecked")
     public <P> P getParameter(String name){
-        return (P)parametersMap.getNull(name);
+        return (P)parametersMap.get(name);
     }
 
     public Number getNumParam(String name){
