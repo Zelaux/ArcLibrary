@@ -93,7 +93,7 @@ public class BetterCommandHandler extends CommandHandler {
                 for (int i = 0; i < command.paramPattern.params.length; i++) {
                     BCommandParam param = command.paramPattern.params[i];
                     if (args.has(i)) {
-                        ParamHandler<?> handler = handlerObjectMap.getNull(param.handlerName);
+                        ParamHandler<?> handler = handlerObjectMap.get(param.handlerName);
                         if (handler == null) handler = ParamHandler.stringHandler;
                         Result<?> handle = handler.handle(command, args, i);
                         if (handle.isError()) {

@@ -2,7 +2,7 @@ ext{
     versions = [:]
     libraries = [:]
 }
-versions.arc = "v145"
+versions.arc = "208a754044"
 libraries.jnigen = [
         "com.github.libgdx.gdx-jnigen:gdx-jnigen:$versions.jnigen"
 ]
